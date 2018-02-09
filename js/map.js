@@ -201,20 +201,24 @@ var renderCardHouse = function (flat) {
 
   flatType.textContent = TYPE[flat.offer.type];
 
-  flatType.nextElementSibling.textContent = flat.offer.rooms = ' комнаты' + ' для ' + flat.offer.guests + ' гостей';
+  flatType.nextElementSibling.textContent = flat.offer.rooms + ' комнаты' + ' для ' + flat.offer.guests + ' гостей';
   flatType.nextElementSibling.nextElementSibling.textContent = 'Заезд после ' + flat.offer.checkin + ' ,' + 'выезд до '
     + flat.offer.checkout;
 
 
   // вставляем фичи
-  for (var k = 0; k < flat.offer.features.length; k++) {
-    var li = document.createElement('li');
-    li.className = 'feature  feature--' + flat.offer.features[k];
-    featuresFragment.appendChild(li);
-  }
-  features.appendChild(featuresFragment);
-  features.nextElementSibling.textContent = flat.offer.description;
-  document.querySelector('.map').appendChild(cardHouse);
+  var getFeatures = function () {
+    document.querySelector('.map').appendChild(cardHouse);
+    for (var k = 0; k < flat.offer.features.length; k++) {
+      var li = document.createElement('li');
+      li.className = 'feature  feature--' + flat.offer.features[k];
+      featuresFragment.appendChild(li);
+    }
+    features.appendChild(featuresFragment);
+    features.nextElementSibling.textContent = flat.offer.description;
+  };
+
+  getFeatures();
 
   // вставляем фотки
   var photoMove = function () {
@@ -225,7 +229,6 @@ var renderCardHouse = function (flat) {
       img.height = 70;
       li.appendChild(img);
       img.src = flat.offer.photos[j];
-      // console.log(li.src);
       photoFragment.appendChild(li);
     }
     photo.appendChild(photoFragment);
