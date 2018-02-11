@@ -197,7 +197,7 @@ function renderCardHouse(flat, index) {
 
   features.nextElementSibling.textContent = flat.offer.description;
 
-  var map = document.querySelector('.map').appendChild(cardHouse);
+  document.querySelector('.map').appendChild(cardHouse);
   cardHouse.setAttribute('rel', index);
 
   // удаляем карточку квартиры по клику на крестик
@@ -209,17 +209,19 @@ function renderCardHouse(flat, index) {
       popup.forEach(function (elem) {
         elem.remove();
       });
-      document.removeEventListener('keydown', popupCloseCrossHandler);
-      popup.forEach(function (elem) {
+      mapPin.forEach(function (elem) {
         elem.classList.remove('map__pin--active');
       });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
     });
   });
 
   // удаляем карточку квартиры по нажатию ESCAPE
   function popupCloseCrossHandler(e) {
     if (e.keyCode === ESC_BUTTON) {
-      map.parentNode.removeChild(cardHouse);
+      popup.forEach(function (elem) {
+        elem.remove();
+      });
       document.removeEventListener('keydown', popupCloseCrossHandler);
     }
   }
@@ -239,6 +241,9 @@ var ENTER_BUTTON = 13;
 var form = document.querySelector('.notice__form'); // форма
 var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
 var map = document.querySelector('.map'); // карта
+var fieldset = document.querySelectorAll('fieldset');
+var avatar = document.querySelector('#avatar');
+var images = document.querySelector('#images');
 
 
 // Скрываем метки после загрузки страницы
@@ -250,6 +255,16 @@ mapPin.forEach(function (t) {
 
 // главная метка видна после загрузки страницы
 mapPinMain.style.display = 'block';
+
+// делаем неактивными поля формы
+fieldset.forEach(function (elem) {
+  elem.setAttribute('disabled', 'disabled');
+});
+
+// делаем неактивными поля загруки файлов
+avatar.setAttribute('disabled', 'disabled');
+images.setAttribute('disabled', 'disabled');
+
 
 // Скрываем карточки с инфоормацией
 var houseCard = document.querySelectorAll('.popup');
@@ -271,6 +286,9 @@ mapPinMain.addEventListener('mouseup', function () {
         renderCardHouse(flats[index]);
       }
     });
+  });
+  fieldset.forEach(function (elem) {
+    elem.removeAttribute('disabled');
   });
 });
 
