@@ -197,7 +197,8 @@ function renderCardHouse(flat, index) {
 
   features.nextElementSibling.textContent = flat.offer.description;
 
-  var map = document.querySelector('.map').appendChild(cardHouse);
+  document.querySelector('.map').appendChild(cardHouse);
+
   cardHouse.setAttribute('rel', index);
 
   // удаляем карточку квартиры по клику на крестик
@@ -209,17 +210,19 @@ function renderCardHouse(flat, index) {
       popup.forEach(function (elem) {
         elem.remove();
       });
-      document.removeEventListener('keydown', popupCloseCrossHandler);
-      popup.forEach(function (elem) {
+      mapPin.forEach(function (elem) {
         elem.classList.remove('map__pin--active');
       });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
     });
   });
 
   // удаляем карточку квартиры по нажатию ESCAPE
   function popupCloseCrossHandler(e) {
     if (e.keyCode === ESC_BUTTON) {
-      map.parentNode.removeChild(cardHouse);
+      popup.forEach(function (elem) {
+        elem.remove();
+      });
       document.removeEventListener('keydown', popupCloseCrossHandler);
     }
   }
