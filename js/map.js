@@ -1,8 +1,8 @@
 'use strict';
 
-// исходные данные
+// Исходные данные
 
-var HOUSE_TILES = [
+var TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
   'Огромный прекрасный дворец',
@@ -13,17 +13,18 @@ var HOUSE_TILES = [
   'Неуютное бунгало по колено в воде'
 ];
 
-var HOUSE_TYPE = [
+var TYPES = [
   'flat',
   'house',
-  'bungalow'
+  'bungalo'
 ];
 
-var HOUSE_CHECKIN_CHECKOUT = [
-  '12.00',
-  '13.00',
-  '14.00'
+var TIME_FOR_ARRIVAL_AND_DEPATURE = [
+  '12:00',
+  '13:00',
+  '14:00'
 ];
+
 
 var HOUSE_FEATURES = [
   'wifi',
@@ -34,204 +35,265 @@ var HOUSE_FEATURES = [
   'conditioner'
 ];
 
-var HOSE_PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
-
-// сюда поместим квартиры
+// массив куда будем записывать все данные
 var flats = [];
 
-// функция генерации случайного числа
-var getRandomNumber = function (min, max) {
+
+// ------------------------------------------------------------------
+
+
+// генерим случайное число
+function getRandomNumber(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
-};
+}
+
 
 // получить случайный элемент массива
-var getRandomItem = function (array) {
-  var randomItem = Math.floor(Math.random() * array.length);
-  return array[randomItem];
-};
+function getRandItem(array) {
+  var randItem = Math.floor(Math.random() * array.length);
+  return array[randItem];
+}
 
-// функция получения уникальных фич HOSE_FEATURES
+
+// функция для получения уникальных фич квартиры из массива HOUSE_FEATURES
+
 /* Проходим по массиву со значениями. Добавляем в объект элемент и присваиваем ему единицу.
-Если элементу не присвоена единица - присваиваем. Если встречается дубликат, делаем проверку.
-Если ключ:значению присвоена единица, то в массив его больше не добавляем. Понадобятся пустой объект и пустой массив. */
+Если элементу не присвоена единца - присваиваем. Если встречается дубликат делаем проверку,
+если ключ-значению объекта присвоена единица, то в масиив его больше не добавляем. */
 
-var getUniqueFeatures = function (array) {
-  var uniqueFeatures = {}; // новый объект
-  var resultUniqueFeatures = []; // массив для новых фич
+function getUniqueFeatures(array) {
+  var obj = {}; // пустой объект
+  var resultFeatures = []; // результатирующий массив куда будем складывать полученные значения
 
+  // цикл для получения данных
   for (var i = 0; i < array.length; i++) {
     var item = array[i];
-    if (uniqueFeatures[item] !== 1) {
-      uniqueFeatures[item] = 1;
-      resultUniqueFeatures.push(item);
+    if (obj[item] !== 1) {
+      obj[item] = 1;
+      resultFeatures.push(item);
     }
   }
-  return resultUniqueFeatures;
-};
+  return resultFeatures;
+}
 
 
-// функция для получения случайных фич из массива resultUniqueFeatures
-var getRandomFeatures = function (array) {
+// функция для получения случайных элементов из массива с фичами resultFeatures
+function getRandomFeatures(array) {
 
-  var randomFeaturesLength = getRandomNumber(1, array.length); // генерим случаное количество фич
+  var randomFeaturesLength = getRandomNumber(1, array.length); // генерим случайную длинну массива
+  var result = []; // результатирующий массив. Равен случайной длинне из строки выше
 
-  var result = []; // массив куда сложим фичи из строки выше
-
-  for (var i = 0; i < randomFeaturesLength; i++) { // проходимся по количеству фич
-    result.push(getRandomItem(array)); // вставляем в массив фич случаный элемент
+  for (var j = 0; j < randomFeaturesLength; j++) { // проходимся циклом по этой длинне
+    result.push(getRandItem(array)); // вставляем в результирующий массив случайный элемент массива
   }
   return getUniqueFeatures(result);
-};
-
-
-// Фишер-Йетс для расстановки фото в случайном порядке
-var randomizeArray = function (arr) {
-  var arrCopy = arr.slice();
-  var result = [];
-  for (var j = 0; j < arrCopy.length; j++) {
-    var randomArrayIndex = Math.floor(Math.random() * arrCopy.length);
-    result.push(arrCopy[randomArrayIndex]);
-    arrCopy.splice(randomArrayIndex, 1);
-    j--;
-  }
-  return result;
-};
+}
 
 
 // создаём разные варианты квартир
+function getVariantFlats() {
 
-var getVariantsFlats = function () {
   for (var i = 1; i <= 8; i++) {
-    var addressX = getRandomNumber(300, 900);
-    var addressY = getRandomNumber(150, 500);
+
+    var addressesX = getRandomNumber(300, 900);
+    var addressesY = getRandomNumber(100, 500);
 
     flats.push({
       author: {
         avatar: 'img/avatars/user' + '0' + i + '.png'
       },
       offer: {
-        title: getRandomItem(HOUSE_TILES),
-        address: addressX + ', ' + addressY,
+        title: getRandItem(TITLES),
+        address: addressesX + ',' + addressesY,
         price: getRandomNumber(1000, 1000000),
-        type: getRandomItem(HOUSE_TYPE),
+        type: getRandItem(TYPES),
         rooms: getRandomNumber(1, 5),
         guests: getRandomNumber(1, 10),
-        checkin: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
-        checkout: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
+        checkin: getRandItem(TIME_FOR_ARRIVAL_AND_DEPATURE),
+        checkout: getRandItem(TIME_FOR_ARRIVAL_AND_DEPATURE),
         features: getRandomFeatures(HOUSE_FEATURES),
-        description: 'Жильё в центре города',
-        photos: randomizeArray(HOSE_PHOTOS)
+        photos: [],
+        description: ''
       },
       location: {
-        x: getRandomNumber(300, 900),
-        y: getRandomNumber(150, 500)
+        x: addressesX,
+        y: addressesY
       }
     });
   }
   return flats;
-};
+}
 
-getVariantsFlats();
+getVariantFlats();
 
-// -------------------------------------
 
-// активируем карту
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+// ------------------------------------------------------------------
 
 // создаём шаблон меток
-var templteMapPin = document.querySelector('template').content.querySelector('.map__pin');
+var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
 
-// блок в которм будут отображены сгененрированные элементы
-var mapPins = document.querySelector('.map__pins');
+// блок в котром будут отображены сгенерированные элементы
+var mapPinsCard = document.querySelector('.map__pins');
 
 // функция создания меток
-var renderMapPins = function (pin) {
-  var newMapPins = templteMapPin.cloneNode(true);
-  newMapPins.querySelector('img').src = pin.author.avatar;
-  newMapPins.style.left = (pin.location.x) + 'px';
-  newMapPins.style.top = (pin.location.y) + 'px';
-
-  return newMapPins;
-};
+function renderMapPinsCard(pin, index) {
+  var newMapPinsCard = templateMapPin.cloneNode(true);
+  newMapPinsCard.querySelector('img').src = pin.author.avatar;
+  newMapPinsCard.querySelector('img').setAttribute('rel', index);
+  newMapPinsCard.style.left = (pin.location.x) + 'px';
+  newMapPinsCard.style.top = (pin.location.y) + 'px';
+  newMapPinsCard.setAttribute('rel', index);
+  return newMapPinsCard;
+}
 
 var fragmentPins = document.createDocumentFragment();
 
 for (var i = 0; i < flats.length; i++) {
-  fragmentPins.appendChild(renderMapPins(flats[i]));
+  fragmentPins.appendChild(renderMapPinsCard(flats[i], i));
 }
+mapPinsCard.appendChild(fragmentPins);
 
-mapPins.appendChild(fragmentPins);
 
-// -------------------------------------
+// ------------------------------------------------------------------
+
 
 // создаём шаблон карточек квартир
 var templateCardHouse = document.querySelector('template').content.querySelector('.map__card');
 
-// объект с типами квартир
-var TYPE = {
+// создаём объект с типами квартир
+var HOUSE_TYPES = {
   'flat': 'Квартира',
   'house': 'Дом',
-  'bungalow': 'Бунгало'
+  'bungalo': 'Бунгало'
 };
 
 // функция для генерации новых карточек с информацией
-var renderCardHouse = function (flat) {
+function renderCardHouse(flat, index) {
 
-  var cardHouse = templateCardHouse.cloneNode(true);
+  var cardHouse = templateCardHouse.cloneNode(true); // клонируем узел целиком
   var features = cardHouse.querySelector('.popup__features');
   var flatType = cardHouse.querySelector('h4');
-  var photo = cardHouse.querySelector('.popup__pictures');
-  var photoFragment = document.createDocumentFragment();
-  var featuresFragment = document.createDocumentFragment();
+  var featuresFragment = document.createDocumentFragment(); // создаём фрагмент документа, куда будем вставлять фичи
 
-  cardHouse.querySelector('.popup__avatar').textContent = flat.author.avatar;
+  cardHouse.querySelector('.popup__avatar').src = flat.author.avatar;
   cardHouse.querySelector('h3').textContent = flat.offer.title;
-  cardHouse.querySelector('small').innerHTML = flat.offer.address;
+  cardHouse.querySelector('small').textContent = flat.offer.address;
   cardHouse.querySelector('.popup__price').innerHTML = flat.offer.price + ' &#x20bd;/ночь';
   cardHouse.querySelector('h4').textContent = flat.offer.type;
   cardHouse.querySelector('.popup__features').innerHTML = '';
-  cardHouse.querySelector('.popup__pictures').innerHTML = '';
-  cardHouse.querySelector('.popup__features').nextElementSibling.textContent = flat.offer.description;
 
+  flatType.textContent = HOUSE_TYPES[flat.offer.type];
 
-  flatType.textContent = TYPE[flat.offer.type];
-
-  flatType.nextElementSibling.textContent = flat.offer.rooms = ' комнаты' + ' для ' + flat.offer.guests + ' гостей';
+  flatType.nextElementSibling.textContent = flat.offer.rooms + ' комнаты' + ' для ' + flat.offer.guests + ' гостей';
   flatType.nextElementSibling.nextElementSibling.textContent = 'Заезд после ' + flat.offer.checkin + ' ,' + 'выезд до '
     + flat.offer.checkout;
 
-
-  // вставляем фичи
   for (var k = 0; k < flat.offer.features.length; k++) {
     var li = document.createElement('li');
     li.className = 'feature  feature--' + flat.offer.features[k];
     featuresFragment.appendChild(li);
   }
   features.appendChild(featuresFragment);
+
   features.nextElementSibling.textContent = flat.offer.description;
-  document.querySelector('.map').appendChild(cardHouse);
 
-  // вставляем фотки
-  var photoMove = function () {
-    for (var j = 0; j < flat.offer.photos.length; j++) {
-      var li = document.createElement('li');
-      var img = document.createElement('img');
-      img.width = 70;
-      img.height = 70;
-      li.appendChild(img);
-      img.src = flat.offer.photos[j];
-      // console.log(li.src);
-      photoFragment.appendChild(li);
+  var map = document.querySelector('.map').appendChild(cardHouse);
+  cardHouse.setAttribute('rel', index);
+
+  // удаляем карточку квартиры по клику на крестик
+  var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
+  var popup = document.querySelectorAll('.popup');
+
+  popupClose.forEach(function (t) {
+    t.addEventListener('click', function () {
+      popup.forEach(function (elem) {
+        elem.remove();
+      });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
+      popup.forEach(function (elem) {
+        elem.classList.remove('map__pin--active');
+      });
+    });
+  });
+
+  // удаляем карточку квартиры по нажатию ESCAPE
+  function popupCloseCrossHandler(e) {
+    if (e.keyCode === ESC_BUTTON) {
+      map.parentNode.removeChild(cardHouse);
+      document.removeEventListener('keydown', popupCloseCrossHandler);
     }
-    photo.appendChild(photoFragment);
-  };
-  photoMove();
-};
+  }
 
-renderCardHouse(flats[0]);
+  document.addEventListener('keydown', popupCloseCrossHandler);
+}
+
+
+// ----------------------------------------------
+// Задание Подробности
+// Обработка событий
+
+var ESC_BUTTON = 27;
+var ENTER_BUTTON = 13;
+
+// Элементы разметки
+var form = document.querySelector('.notice__form'); // форма
+var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
+var map = document.querySelector('.map'); // карта
+
+
+// Скрываем метки после загрузки страницы
+var mapPin = document.querySelectorAll('.map__pin');
+mapPin.forEach(function (t) {
+  t.style.display = 'none';
+  t.classList.remove('map__pin--active');
+});
+
+// главная метка видна после загрузки страницы
+mapPinMain.style.display = 'block';
+
+// Скрываем карточки с инфоормацией
+var houseCard = document.querySelectorAll('.popup');
+houseCard.forEach(function (t) {
+  t.style.display = 'none';
+});
+
+// активируем карту
+mapPinMain.addEventListener('mouseup', function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('notice__form--disabled');
+
+  // отображаем метки и карточки квартир на экране
+  mapPin.forEach(function (elem) {
+    elem.style.display = 'block';
+    elem.addEventListener('click', function (e) {
+      var index = e.target.getAttribute('rel');
+      if (index) {
+        renderCardHouse(flats[index]);
+      }
+    });
+  });
+});
+
+// добавляем класс метке по клику
+mapPin.forEach(function (t) {
+  t.addEventListener('click', function (e) {
+    mapPin.forEach(function () {
+      mapPinMain.classList.remove('map__pin--active');
+      t.className = t.className.replace('map__pin--active', '');
+      e.currentTarget.classList.add('map__pin--active');
+    });
+  });
+});
+
+// добавляем активный класс метке по нажатию ENTER
+mapPin.forEach(function (elem) {
+  elem.addEventListener('keydown', function (e) {
+    mapPin.forEach(function (t) {
+      if (e.keyCode === ENTER_BUTTON) {
+        t.className = t.className.replace('map__pin--active', '');
+        e.currentTarget.classList.add('map__pin--active');
+      }
+    });
+  });
+});
 
