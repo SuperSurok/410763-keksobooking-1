@@ -46,16 +46,7 @@
   // очистка формы после отправки данных на сервер
   form.addEventListener('submit', function (e) {
     form.reset();
-    // e.preventDefault();
-    button.keyup(function () {
-      if(formTypeFlat.val() != '') {
-        button.prop('disabled', false)
-      } else {
-        button.prop('disabled', true);
-      }
-    });
+    e.preventDefault();
   });
-
-
 })();
 
