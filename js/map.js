@@ -244,6 +244,7 @@ var map = document.querySelector('.map'); // карта
 var fieldset = document.querySelectorAll('fieldset');
 var avatar = document.querySelector('#avatar');
 var images = document.querySelector('#images');
+var button = document.querySelector('.form-submit');
 
 
 // Скрываем метки после загрузки страницы

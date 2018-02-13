@@ -14,6 +14,7 @@
   var formTimeout = document.querySelector('#timeout');
   var formRoomNumber = document.querySelector('#room_number');
   var formRoomCapacity = document.querySelector('#capacity');
+  var button = document.querySelector('.form__submit');
 
   // Синхронизация атрибутов value
   function syncFormControlValues(element, value) {
@@ -24,6 +25,7 @@
   function syncFormControlMinValues(element, value) {
     element.min = value;
   }
+
 
   // Синохронизируем поля формы
   function syncFormControls(firstControl, secondControl, firstOptions, secondOptions, callBackFunction) {
@@ -39,6 +41,21 @@
   syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
   syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
   syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
+  syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
+
+  // очистка формы после отправки данных на сервер
+  form.addEventListener('submit', function (e) {
+    form.reset();
+    // e.preventDefault();
+    button.keyup(function () {
+      if(formTypeFlat.val() != '') {
+        button.prop('disabled', false)
+      } else {
+        button.prop('disabled', true);
+      }
+    });
+  });
+
 
 })();
 
