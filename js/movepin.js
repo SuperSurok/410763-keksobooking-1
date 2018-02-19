@@ -17,15 +17,23 @@ window.map = (function () {
   function mapPinMainHandle(e) {
     e.preventDefault();
 
-    // координаты курсора на объекте
+    // начальные координаты
     var startCoords = {
       x: e.clientX,
       y: e.clientY
     };
 
+    var shift = {};
+    var markerCoords = {};
+
     // функция перермещения метки
     function onMouseMove(moveEvt) {
       moveEvt.preventDefault();
+
+      shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
 
       var dragPinLimits = {
         minX: 0,
@@ -38,6 +46,11 @@ window.map = (function () {
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
+      };
+
+      markerCoords = {
+        x: mapPinMain.offsetLeft - shift.x,
+        y: mapPinMain.offsetTop - shift.y
       };
 
       // пермещение метки
