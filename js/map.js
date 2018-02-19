@@ -1,14 +1,6 @@
 'use strict';
 (function () {
 
-
-// ------------------------------------------------------------------
-
-
-
-// ------------------------------------------------------------------
-
-
 // удаляем карточку квартиры по клику на крестик
   var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
   var popup = document.querySelectorAll('.popup');
@@ -37,7 +29,6 @@
 
   document.addEventListener('keydown', popupCloseCrossHandler);
 
-
 // Задание Подробности
 // Обработка событий
 
@@ -52,6 +43,9 @@ var fieldset = document.querySelectorAll('fieldset');
 var avatar = document.querySelector('#avatar');
 var images = document.querySelector('#images');
 
+// делаем неактивными поля загруки файлов
+  avatar.setAttribute('disabled', 'disabled');
+  images.setAttribute('disabled', 'disabled');
 
 // Скрываем метки после загрузки страницы
 var mapPin = document.querySelectorAll('.map__pin');
@@ -67,10 +61,6 @@ mapPinMain.style.display = 'block';
 fieldset.forEach(function (elem) {
   elem.setAttribute('disabled', 'disabled');
 });
-
-// делаем неактивными поля загруки файлов
-avatar.setAttribute('disabled', 'disabled');
-images.setAttribute('disabled', 'disabled');
 
 
 // Скрываем карточки с инфоормацией
@@ -97,6 +87,10 @@ mapPinMain.addEventListener('mouseup', function () {
   fieldset.forEach(function (elem) {
     elem.removeAttribute('disabled');
   });
+  // делаем неактивными поля загруки файлов
+  avatar.removeAttribute('disabled');
+  images.removeAttribute('disabled');
+
 });
 
 // добавляем класс метке по клику
