@@ -41,5 +41,12 @@
   syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
   syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
 
+  var form = document.querySelector('.notice__form');
+  form.addEventListener('submit', function (e) {
+    window.backend.upLoad(new FormData(form), function (response) {
+      form.classList.add('notice__form--disabled');
+    });
+    e.preventDefault();
+  });
 })();
 

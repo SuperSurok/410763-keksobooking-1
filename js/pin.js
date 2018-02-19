@@ -7,7 +7,7 @@
   var mapPinsCard = document.querySelector('.map__pins');
 
 // функция создания меток
-  window.renderMapPinsCard = function (pin, index) {
+  function renderMapPinsCard(pin, index) {
     var newMapPinsCard = templateMapPin.cloneNode(true);
     newMapPinsCard.querySelector('img').src = pin.author.avatar;
     newMapPinsCard.querySelector('img').setAttribute('rel', index);
@@ -23,5 +23,9 @@
     fragmentPins.appendChild(renderMapPinsCard(window.data.flats[i], i));
   }
   mapPinsCard.appendChild(fragmentPins);
+
+  window.pin = {
+    renderMapPinsCard: renderMapPinsCard
+  }
 
 })();

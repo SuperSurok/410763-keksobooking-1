@@ -1,4 +1,4 @@
-window.data = (function () {
+(function () {
   // Исходные данные
 
   var TITLES = [
@@ -36,6 +36,8 @@ window.data = (function () {
 
 // массив куда будем записывать все данные
   var flats = [];
+
+var mapPin = document.querySelectorAll('.map__pin');
 
 // функция для получения уникальных фич квартиры из массива HOUSE_FEATURES
 
@@ -119,7 +121,7 @@ window.data = (function () {
   };
 
 // функция для генерации новых карточек с информацией
-  window.renderCardHouse = function (flat, index) {
+   function renderCardHouse (flat, index) {
 
     var cardHouse = templateCardHouse.cloneNode(true); // клонируем узел целиком
     var features = cardHouse.querySelector('.popup__features');
@@ -179,9 +181,12 @@ window.data = (function () {
     }
 
     document.addEventListener('keydown', popupCloseCrossHandler);
-  };
+  }
 
-  return {
-    flats: flats
+
+  window.data = {
+    renderCardHouse: renderCardHouse,
+    flats: flats,
+    mapPin: mapPin
   }
 })();
