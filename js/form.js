@@ -15,6 +15,20 @@
   var formRoomNumber = document.querySelector('#room_number');
   var formRoomCapacity = document.querySelector('#capacity');
 
+  var fieldset = document.querySelectorAll('fieldset');
+  var avatar = document.querySelector('#avatar');
+  var images = document.querySelector('#images');
+
+
+  // делаем неактивными поля загруки файлов
+  avatar.setAttribute('disabled', 'disabled');
+  images.setAttribute('disabled', 'disabled');
+
+  // делаем неактивными поля формы
+  fieldset.forEach(function (elem) {
+    elem.setAttribute('disabled', 'disabled');
+  });
+
   // Синхронизация атрибутов value
   function syncFormControlValues(element, value) {
     element.value = value;
@@ -48,5 +62,11 @@
     });
     e.preventDefault();
   });
+
+  window.form = {
+    fieldset: fieldset,
+    avatar: avatar,
+    images: images
+  }
 })();
 
