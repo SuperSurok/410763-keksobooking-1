@@ -9,7 +9,7 @@
     xhr.timeout = TIME_OUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status = CODE_SUCCESS) {
+      if (xhr.status === CODE_SUCCESS) {
         onSuccess(xhr.response);
       } else {
         onError('Error ' + xhr.status);
@@ -35,7 +35,7 @@
     load: function (onLoad, onError) {
       var URL = 'https://js.dump.academy/keksobooking/data';
       var xhr = init(onLoad, onError);
-      xhr.open('GET', URL + '/data');
+      xhr.open('GET', URL);
       xhr.send();
     }
   }

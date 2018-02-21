@@ -17,6 +17,8 @@
 
   var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
   var map = document.querySelector('.map'); // карта
+  var mapPinsCard = document.querySelector('.map__pins'); // блок в котром будут отображены сгенерированные элементы
+
 
   var dragPinLimits = {
     minX: 200,
@@ -59,12 +61,6 @@
     });
   });
 
-
-  // создаём шаблон меток
-  var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
-
-// блок в котром будут отображены сгенерированные элементы
-  var mapPinsCard = document.querySelector('.map__pins');
 
 // функция создания меток
   function renderMapPinsCard(pinsList) {
