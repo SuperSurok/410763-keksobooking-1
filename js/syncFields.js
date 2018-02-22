@@ -1,7 +1,6 @@
 'use strict';
-
 // модуль синхронизации полей
-window.synchronizeFields = (function () {
+(function () {
   function syncFormControls(firstControl, secondControl, firstOptions, secondOptions, callbackFunctions) {
     function syncFormControlsClickHandler() {
       var indexOfValue = firstOptions.indexOf(firstControl.value);
@@ -11,7 +10,7 @@ window.synchronizeFields = (function () {
     firstControl.addEventListener('change', syncFormControlsClickHandler);
   }
 
-  return {
+  window.syncFields = {
     syncFormControls: syncFormControls
   };
 })();

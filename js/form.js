@@ -17,6 +17,7 @@
   var formRoomCapacity = document.querySelector('#capacity');
   var formAddress = document.querySelector('#address');
   var formTitle = document.querySelector('#title');
+  var formPhotoContainer = document.querySelector('.form__photo-container');
 
   var fieldset = document.querySelectorAll('fieldset');
   var avatar = document.querySelector('#avatar');
@@ -42,25 +43,15 @@
     element.min = value;
   }
 
-  // Синохронизируем поля формы
-  function syncFormControls(firstControl, secondControl, firstOptions, secondOptions, callBackFunction) {
-    function syncFormControlsClickHandler() {
-      var indexOfValue = firstOptions.indexOf(firstControl.value);
-      callBackFunction(secondControl, secondOptions[indexOfValue]);
-    }
-
-    firstControl.addEventListener('change', syncFormControlsClickHandler);
-  }
-
-  var fieldsSync = function (addListener) {
-    syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues, addListener);
-    syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues, addListener);
-    syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues, addListener);
-    syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues, addListener);
-    syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues, addListener);
+  var initFieldSync = function () {
+    window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
+    window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
+    window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
+    window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
+    window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
   };
 
-  fieldsSync(true);
+  initFieldSync();
 
   var errorData = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
@@ -77,6 +68,20 @@
   function clearForm() {
     form.reset();
   }
+
+  var showImagePreview = function (image, file) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      image.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  var clearPhotoThumbnail = function () {
+    formPhotoContainer.querySelectorAll('.thumbnail').forEach(function (thumbnail) {
+      thumbnail.remove();
+    })
+  };
 
   // валидация формы
   form.addEventListener('submit', function (e) {
@@ -113,6 +118,40 @@
     }
   });
 
+
+  avatar.addEventListener('change', function () {
+    if (avatar.files && avatar.files[0]) {
+      showImagePreview(document.querySelector('.notice__preview img'), avatar.files[0]);
+    }
+  });
+
+  images.addEventListener('change', function () {
+    clearPhotoThumbnail();
+    if (images.files.length > 0) {
+      for (var i = 0; i < images.files.length; i++) {
+        var imageThumbnailContainer = document.createElement('div');
+        imageThumbnailContainer.classList.add('thumbnail');
+        imageThumbnailContainer.style.border = '1px solid silver';
+        imageThumbnailContainer .style.borderRadius = '5px';
+        imageThumbnailContainer .style.height = '100px';
+        imageThumbnailContainer .style.padding = '5px';
+        imageThumbnailContainer .style.float = 'left';
+        imageThumbnailContainer .style.margin = '5px 5px 0px 0';
+        var imageThumbnail = document.createElement('img');
+        imageThumbnail.style.maxHeight = '100%';
+        showImagePreview(imageThumbnail, images.files[i]);
+        imageThumbnailContainer.appendChild(imageThumbnail);
+        formPhotoContainer.appendChild(imageThumbnailContainer);
+      }
+    }
+  });
+
+  form.addEventListener('reset', function () {
+    clearPhotoThumbnail();
+    setTimeout(function () {
+      initFieldSync(false)
+    }, 100);
+  });
 
   window.form = {
     fieldset: fieldset,
