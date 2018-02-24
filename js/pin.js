@@ -14,11 +14,21 @@
   var PARSE_INT_RADIX = 10;
 
   var PINS_LIMIT = 5;
+  var DEBOUNCE_TIMEOUT_DEFAULT = 500;
 
   var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
+  var mapPin = document.querySelectorAll('.map__pin');
   var map = document.querySelector('.map'); // карта
   var mapPinsCard = document.querySelector('.map__pins'); // блок в котром будут отображены сгенерированные элементы
 
+  var lastTimeout = null;
+
+  var filterForm = document.querySelector('.map__filters');
+  var filterType = filterForm.querySelector('#housing-type');
+  var filterPrice = filterForm.querySelector('#housing-price');
+  var filterRooms = filterForm.querySelector('#housing-rooms');
+  var filterGuests = filterForm.querySelector('#housing-guests');
+  var featuresFieldSet = filterForm.querySelector('#housing-features');
 
   var dragPinLimits = {
     minX: 200,
@@ -27,43 +37,33 @@
     maxY: COORDS_LIMITS.bottom - MAP_PIN_SIZES.height / 2
   };
 
-  // Скрываем метки после загрузки страницы
-  var mapPin = document.querySelectorAll('.map__pin');
-  mapPin.forEach(function (t) {
-    t.style.display = 'none';
-    t.classList.remove('map__pin--active');
-  });
 
-  // главная метка видна после загрузки страницы
-  mapPinMain.style.display = 'block';
+  var makeActive = function (elements, isActive) {
+    for (var i = 0; i < elements.length; i++) {
+      if (isActive) {
+        elements[i].classList.add('map__pin--active');
+      } else {
+        elements[i].classList.remove('map__pin--active');
+      }
+    }
+  };
 
+  var onPinBind = function (marker, offer) {
+    makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
+    makeActive(marker, true);
+    window.showCard.removeCard();
+    window.showCard.showCard(offer);
+  };
 
-  // добавляем класс метке по клику
-  mapPin.forEach(function (t) {
-    t.addEventListener('click', function (e) {
-      mapPin.forEach(function () {
-        mapPinMain.classList.remove('map__pin--active');
-        t.className = t.className.replace('map__pin--active', '');
-        e.currentTarget.classList.add('map__pin--active');
-      });
+  var pinBind = function (marker, offer) {
+    marker.addEventListener('click', function () {
+      onPinBind([marker], offer);
     });
-  });
+  };
 
-// добавляем активный класс метке по нажатию ENTER
-  mapPin.forEach(function (elem) {
-    elem.addEventListener('keydown', function (e) {
-      mapPin.forEach(function (t) {
-        if (e.keyCode === ENTER_BUTTON) {
-          t.className = t.className.replace('map__pin--active', '');
-          e.currentTarget.classList.add('map__pin--active');
-        }
-      });
-    });
-  });
-
-
-// функция создания меток
+  // функция создания меток
   function renderMapPinsCard(pinsList) {
+    debugger;
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < pinsList.length && i < PINS_LIMIT; i++) {
       var pin = pinsList[i];
@@ -71,7 +71,8 @@
       marker.style.left = pin.location.x - 4 + 'px';
       marker.style.top = pin.location.y - 40 + 'px';
       marker.className = 'map__pin';
-      marker.innerHTML = '<img src="' + pin.author.avatar +'" width="40" height="40" draggable="false">';
+      marker.innerHTML = '<img src="' + pin.author.avatar + '" width="40" height="40" draggable="false">';
+      pinBind(marker, pin);
       fragment.appendChild(marker);
     }
     mapPinsCard.appendChild(fragment);
@@ -120,14 +121,14 @@
     }
 
 
-    function onMouseUp(upEvt) {
+    var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       var address = document.querySelector('#address');
       address.value = 'x: ' + parseInt(mapPinMain.offsetLeft, PARSE_INT_RADIX) + ', ' + 'y: ' + (parseInt(mapPinMain.offsetTop, PARSE_INT_RADIX) + MAP_PIN_SIZES.height);
       window.map.init();
-    }
+    };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -136,9 +137,130 @@
 
   mapPinMain.addEventListener('mousedown', mapPinMainHandle);
 
+  // удаляем пины
+
+  var removePins = function () {
+    var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
+    window.card.removeCard();
+    pins.forEach(function (e) {
+      e.remove();
+    });
+  };
+
+  function debounce(callback, timeout) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(callback, timeout);
+  }
+
+
+  function filterByType(offer, filter) {
+    return (filter.type === offer.offer.type);
+  }
+
+  function filterByPrice(offer, filter) {
+    var result = true;
+    switch (filter.price) {
+      case 'middle':
+        // 10000 - 50000₽
+        if (offer.offer.price < 10000 || offer.offer.price > 50000) {
+          result = false;
+        }
+        break;
+      case 'low':
+        // до 10000₽
+        if (offer.offer.price > 10000) {
+          result = false;
+        }
+        break;
+      case 'high':
+        // от 50000₽
+        if (offer.offer.price < 50000) {
+          result = false;
+        }
+        break;
+    }
+    return result;
+  }
+
+  function filterByRooms(offer, filter) {
+    return (parseInt(filter.rooms, 10) === parseInt(offer.offer.rooms, 10));
+  }
+
+  function filterByGuests(offer, filter) {
+    return (parseInt(filter.guests, 10) === parseInt(offer.offer.guests, 10));
+  }
+
+  function filterByFeatures(offer, filter) {
+    var result = true;
+    filter.features.forEach(function (feature) {
+      if (offer.offer.features.indexOf(feature) < 0) {
+        result = false;
+      }
+    });
+    return result;
+  }
+
+  filterForm.addEventListener('change', function () {
+
+    debounce(function () {
+      removePins();
+
+      var filters = {
+        'type': filterType.value,
+        'price': filterPrice.value,
+        'rooms': filterRooms.value,
+        'guests': filterGuests.value,
+        'features': []
+      };
+
+      var selectedFeatures = featuresFieldSet.querySelectorAll('input[type=checkbox]:checked');
+      selectedFeatures.forEach(function (feature) {
+        filters.features.push(feature.value);
+      });
+
+      var offers = window.data.flats;
+      var filteredOffers = offers;
+
+      if (filters.type !== 'any') {
+        filteredOffers = filteredOffers.filter(function (offer) {
+          return filterByType(offer, filters);
+        });
+      }
+
+      if (filters.price !== 'any') {
+        filteredOffers = filteredOffers.filter(function (offer) {
+          return filterByPrice(offer, filters);
+        });
+      }
+
+      if (filters.rooms !== 'any') {
+        filteredOffers = filteredOffers.filter(function (offer) {
+          return filterByRooms(offer, filters);
+        });
+      }
+
+      if (filters.guests !== 'any') {
+        filteredOffers = filteredOffers.filter(function (offer) {
+          return filterByGuests(offer, filters);
+        });
+      }
+
+      if (filters.features.length > 0) {
+        filteredOffers = filteredOffers.filter(function (offer) {
+          return filterByFeatures(offer, filters);
+        });
+      }
+
+      renderMapPinsCard(filteredOffers);
+    }, DEBOUNCE_TIMEOUT_DEFAULT);
+
+  });
   window.pin = {
     renderMapPinsCard: renderMapPinsCard,
+    makeActive: makeActive,
     mapPin: mapPin
-  }
+  };
 
 })();
