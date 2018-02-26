@@ -21,7 +21,7 @@
 
   var getOffersFromServer = function (callback) {
     window.backend.load(function (data) {
-      window.data.offers = data;
+      window.data.flats = data;
       if (callback !== 'undefined') {
         callback();
       }

@@ -63,7 +63,6 @@
 
   // функция создания меток
   function renderMapPinsCard(pinsList) {
-    debugger;
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < pinsList.length && i < PINS_LIMIT; i++) {
       var pin = pinsList[i];
