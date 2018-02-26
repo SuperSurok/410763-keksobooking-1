@@ -2,10 +2,10 @@
 (function () {
 
   var ESC_BUTTON = 27;
-  // var ENTER_BUTTON = 13;
+  var ENTER_BUTTON = 13;
 
 
-  var popupClose = document.querySelectorAll('.popup__close');
+  var popupClose = document.querySelector('.popup__close');
   var popups = document.querySelectorAll('.popup');
   var OFFER_TEMPLATE = document.querySelector('template').content;
 
@@ -14,35 +14,28 @@
     for (var i = 0; i < popups.length; i++) {
       var popup = popups[i];
       popupClose.addEventListener('click', removeCard);
-      popupClose.addEventListener('keydown', popupCloseCrossHandler);
+      popupClose.addEventListener('keydown', popupCloseEnter);
       popup.remove();
     }
     window.pin.makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
+
+    document.removeEventListener('keydown', popupCloseEscape);
   };
 
-  popupClose.forEach(function (t) {
-    t.addEventListener('click', function () {
-      popups.forEach(function (elem) {
-        elem.remove();
-      });
-      window.pin.mapPin.forEach(function (elem) {
-        elem.classList.remove('map__pin--active');
-      });
-      document.removeEventListener('keydown', popupCloseCrossHandler);
-    });
-  });
 
-  // удаляем карточку квартиры по нажатию ESCAPE
-  var popupCloseCrossHandler = function (e) {
-    if (e.keyCode === ESC_BUTTON) {
-      popups.forEach(function (elem) {
-        elem.remove();
-      });
-      document.removeEventListener('keydown', popupCloseCrossHandler);
+  // удаляем карточку по нажатию ESCAPE
+  var popupCloseEscape = function (keyDownEvt) {
+    if (keyDownEvt.keyCode === ESC_BUTTON) {
+      removeCard();
     }
   };
 
-  document.addEventListener('keydown', popupCloseCrossHandler);
+  // удаляем карточку по нажатию на ENTER
+  var popupCloseEnter = function (keyDownEvt) {
+    if (document.activeElement === keyDownEvt.target && keyDownEvt.keyCode === ENTER_BUTTON) {
+      removeCard();
+    }
+  };
 
   // отображаем метки и карточки квартир на экране
   function showCard(offer) {
@@ -55,12 +48,12 @@
     var mapPins = document.querySelector('.map__pins');
     mapPins.insertAdjacentHTML('afterend', offerElement.outerHTML);
 
-    var closeButton = document.querySelector('.popup__close');
+    // var closeButton = document.querySelector('.popup__close');
 
     // повесить бинды
-    closeButton.addEventListener('click', removeCard);
-    document.addEventListener('keydown', popupCloseCrossHandler);
-    // closeButton.addEventListener('keydown', onClosePressEnter);
+    popupClose.addEventListener('click', removeCard);
+    document.addEventListener('keydown', popupCloseEscape);
+    popupClose.addEventListener('keydown', popupCloseEnter);
   }
 
   window.showCard = {
