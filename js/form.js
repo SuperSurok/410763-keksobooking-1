@@ -7,6 +7,8 @@
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
   var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
 
+  var DEFAULT_AVATAR = 'img/muffin.png';
+
   // Поля формы
   var form = document.querySelector('.notice__form');
   var formTypeFlat = document.querySelector('#type');
@@ -23,6 +25,7 @@
   var userAvatar = document.querySelector('#avatar');
   var images = document.querySelector('#images');
 
+
   // активация формы
   var disable = function (isDisable) {
     if (isDisable) {
@@ -38,40 +41,49 @@
 
 
   // Синхронизация атрибутов value
-  function syncFormControlValues(element, value) {
+  var syncFormControlValues = function (element, value) {
     element.value = value;
-  }
-
-  // Задаём значение с минимальной ценой для типа квартиры
-  function syncFormControlMinValues(element, value) {
-    element.min = value;
-  }
-
-  var initFieldSync = function () {
-    window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
-    window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
-    window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
-    window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
-    window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
   };
 
-  initFieldSync();
+  // Задаём значение с минимальной ценой для типа квартиры
+  var syncFormControlMinValues = function (element, value) {
+    element.min = value;
+  };
+
+  var initFieldSync = function (addListener) {
+    window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues, addListener);
+    window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues, addListener);
+    window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues, addListener);
+    window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues, addListener);
+    window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues, addListener);
+  };
+
+  initFieldSync(true);
+
+  var clearForm = function () {
+    form.reset();
+  };
 
   var errorData = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
   };
 
 
-  function errorHandle(message) {
+  var errorHandle = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
     document.body.insertAdjacentElement('afterbegin', el);
-  }
+  };
 
-  function clearForm() {
-    form.reset();
-  }
+  var resetAvatar = function () {
+    var oldAvatar = document.querySelector('.notice__preview img');
+    var newAvatar = oldAvatar.cloneNode(true);
+    newAvatar.src = DEFAULT_AVATAR;
+    oldAvatar.remove();
+    document.querySelector('.notice__preview').appendChild(newAvatar);
+  };
+
 
   var showImagePreview = function (image, file) {
     var reader = new FileReader();

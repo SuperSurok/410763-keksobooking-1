@@ -10,6 +10,8 @@
 
   var flats = [];
 
+  var photos = [];
+
   var checkInCheckOut = ['12:00', '13:00', '14:00'];
 
   var errorHandler = function (message) {
@@ -22,6 +24,7 @@
   var getOffersFromServer = function (callback) {
     window.backend.load(function (data) {
       window.data.flats = data;
+      window.data.photos = data;
       if (callback !== 'undefined') {
         callback();
       }
@@ -34,6 +37,7 @@
     getOffersFromServer: getOffersFromServer,
     flats: flats,
     HOUSE_TYPES: HOUSE_TYPES,
-    checkInCheckOut: checkInCheckOut
+    checkInCheckOut: checkInCheckOut,
+    photos: photos
   };
 })();

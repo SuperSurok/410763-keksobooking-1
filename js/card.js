@@ -9,9 +9,9 @@
     var cardAvatar = cardElement.querySelector('.popup__avatar');
     var cardAddress = cardElement.querySelector('small');
     var cardPrice = cardElement.querySelector('.popup__price');
-    // var cardDescription = cardElement.querySelector('h4');
     var cardFeatures = cardElement.querySelector('.popup__features');
     var cardFlatType = cardElement.querySelector('h4');
+    var pictures = cardElement.querySelector('.popup__pictures');
 
 
     cardTitle.textContent = data.offer.title;
@@ -29,6 +29,20 @@
       li.className = 'feature  feature--' + data.offer.features[k];
       featuresFragment.appendChild(li);
     }
+
+    var picturesFragment = document.createDocumentFragment();
+    for (var j = 0; j < data.offer.photos.length; j++) {
+      var picturesEl = document.createElement('li');
+      var img = document.createElement('img');
+      img.width = 70;
+      img.height = 70;
+      picturesEl.appendChild(img);
+      img.src = data.offer.photos[j];
+      picturesEl.src = data.offer.photos;
+      picturesFragment.appendChild(picturesEl);
+    }
+    pictures.innerHTML = '';
+    pictures.appendChild(picturesFragment);
 
     cardFeatures.innerHTML = '';
     cardFeatures.appendChild(featuresFragment);

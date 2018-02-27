@@ -43,6 +43,8 @@
     var offerElement = OFFER_TEMPLATE.querySelector('article.map__card').cloneNode(true);
 
     offerElement.innerHTML = window.card.renderCardHouse(offer, offerElement);
+    offerElement.style.top = '80px';
+    offerElement.style.width = '300px';
 
     // добавить в дом элемент карточки с данными
     var mapPins = document.querySelector('.map__pins');
