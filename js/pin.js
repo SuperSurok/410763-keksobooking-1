@@ -140,7 +140,7 @@
 
   var removePins = function () {
     var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
-    window.card.removeCard();
+    window.showCard.removeCard();
     pins.forEach(function (e) {
       e.remove();
     });

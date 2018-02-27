@@ -4,13 +4,13 @@
   var ESC_BUTTON = 27;
   var ENTER_BUTTON = 13;
 
-
-  var popupClose = document.querySelector('.popup__close');
-  var popups = document.querySelectorAll('.popup');
   var OFFER_TEMPLATE = document.querySelector('template').content;
 
   // скрываем карточки
   var removeCard = function () {
+    var popups = document.querySelectorAll('.map__card.popup');
+
+    var popupClose = document.querySelector('.popup__close');
     for (var i = 0; i < popups.length; i++) {
       var popup = popups[i];
       popupClose.addEventListener('click', removeCard);
@@ -48,7 +48,8 @@
     var mapPins = document.querySelector('.map__pins');
     mapPins.insertAdjacentHTML('afterend', offerElement.outerHTML);
 
-    // var closeButton = document.querySelector('.popup__close');
+
+    var popupClose = document.querySelector('.popup__close');
 
     // повесить бинды
     popupClose.addEventListener('click', removeCard);
