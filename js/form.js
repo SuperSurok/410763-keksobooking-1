@@ -7,6 +7,8 @@
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
   var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
 
+  var DEFAULT_AVATAR = 'img/muffin.png';
+
   // Поля формы
   var form = document.querySelector('.notice__form');
   var formTypeFlat = document.querySelector('#type');
@@ -20,54 +22,67 @@
   var formPhotoContainer = document.querySelector('.form__photo-container');
 
   var fieldset = document.querySelectorAll('fieldset');
-  var avatar = document.querySelector('#avatar');
+  var userAvatar = document.querySelector('#avatar');
   var images = document.querySelector('#images');
 
 
-  // делаем неактивными поля загруки файлов
-  avatar.setAttribute('disabled', 'disabled');
-  images.setAttribute('disabled', 'disabled');
+  // активация формы
+  var disable = function (isDisable) {
+    if (isDisable) {
+      form.classList.add('notice__form--disabled');
+    } else {
+      form.classList.remove('notice__form--disabled');
+    }
+    for (var i = 0; i < fieldset.length; i++) {
+      fieldset[i].disabled = isDisable;
+    }
+  };
+  disable(true);
 
-  // делаем неактивными поля формы
-  fieldset.forEach(function (elem) {
-    elem.setAttribute('disabled', 'disabled');
-  });
 
   // Синхронизация атрибутов value
-  function syncFormControlValues(element, value) {
+  var syncFormControlValues = function (element, value) {
     element.value = value;
-  }
-
-  // Задаём значение с минимальной ценой для типа квартиры
-  function syncFormControlMinValues(element, value) {
-    element.min = value;
-  }
-
-  var initFieldSync = function () {
-    window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
-    window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
-    window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
-    window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
-    window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
   };
 
-  initFieldSync();
+  // Задаём значение с минимальной ценой для типа квартиры
+  var syncFormControlMinValues = function (element, value) {
+    element.min = value;
+  };
+
+
+  window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
+  window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
+  window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
+  window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
+  window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
+
+
+  var clearForm = function () {
+    form.reset();
+  };
 
   var errorData = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
   };
 
 
-  function errorHandle(message) {
+  var errorHandle = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
     document.body.insertAdjacentElement('afterbegin', el);
-  }
+  };
 
-  function clearForm() {
-    form.reset();
-  }
+
+  var resetAvatar = function () {
+    var oldAvatar = document.querySelector('.notice__preview img');
+    var newAvatar = oldAvatar.cloneNode(true);
+    newAvatar.src = DEFAULT_AVATAR;
+    oldAvatar.remove();
+    document.querySelector('.notice__preview').appendChild(newAvatar);
+  };
+
 
   var showImagePreview = function (image, file) {
     var reader = new FileReader();
@@ -80,7 +95,7 @@
   var clearPhotoThumbnail = function () {
     formPhotoContainer.querySelectorAll('.thumbnail').forEach(function (thumbnail) {
       thumbnail.remove();
-    })
+    });
   };
 
   // валидация формы
@@ -90,7 +105,7 @@
     var errors = [];
 
     // проверка поля адреса
-    if (form.value === '') {
+    if (formAddress.value === '') {
       errorData(formAddress, true);
       errors.push(['formAddress', 'Заполните это поле']);
     } else {
@@ -119,9 +134,9 @@
   });
 
 
-  avatar.addEventListener('change', function () {
-    if (avatar.files && avatar.files[0]) {
-      showImagePreview(document.querySelector('.notice__preview img'), avatar.files[0]);
+  userAvatar.addEventListener('change', function () {
+    if (userAvatar.files && userAvatar.files[0]) {
+      showImagePreview(document.querySelector('.notice__preview img'), userAvatar.files[0]);
     }
   });
 
@@ -132,11 +147,11 @@
         var imageThumbnailContainer = document.createElement('div');
         imageThumbnailContainer.classList.add('thumbnail');
         imageThumbnailContainer.style.border = '1px solid silver';
-        imageThumbnailContainer .style.borderRadius = '5px';
-        imageThumbnailContainer .style.height = '100px';
-        imageThumbnailContainer .style.padding = '5px';
-        imageThumbnailContainer .style.float = 'left';
-        imageThumbnailContainer .style.margin = '5px 5px 0px 0';
+        imageThumbnailContainer.style.borderRadius = '5px';
+        imageThumbnailContainer.style.height = '100px';
+        imageThumbnailContainer.style.padding = '5px';
+        imageThumbnailContainer.style.float = 'left';
+        imageThumbnailContainer.style.margin = '5px 5px 0px 0';
         var imageThumbnail = document.createElement('img');
         imageThumbnail.style.maxHeight = '100%';
         showImagePreview(imageThumbnail, images.files[i]);
@@ -147,16 +162,15 @@
   });
 
   form.addEventListener('reset', function () {
+    resetAvatar();
     clearPhotoThumbnail();
-    setTimeout(function () {
-      initFieldSync(false)
-    }, 100);
   });
 
   window.form = {
     fieldset: fieldset,
-    avatar: avatar,
-    images: images
+    userAvatar: userAvatar,
+    images: images,
+    disable: disable
   };
 })();
 
