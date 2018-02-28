@@ -2,8 +2,8 @@
 (function () {
   var FORM_CHECKINS = ['12:00', '13:00', '14:00'];
   var FORM_CHECKOUTS = ['12:00', '13:00', '14:00'];
-  var FORM_TYPES = ['flat', 'bungalo', 'hose', 'palace'];
-  var FORM_TYPES_MIN_PRICES = [1000, 0, 5000, 10000];
+  var FORM_TYPES = ['bungalo', 'flat', 'house', 'palace'];
+  var FORM_TYPES_MIN_PRICES = [0, 1000, 5000, 10000];
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
   var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
 
