@@ -45,16 +45,17 @@
     var pictures = cardElement.querySelector('.popup__pictures');
 
     var picturesFragment = document.createDocumentFragment();
-    for (var j = 0; j < data.offer.photos.length; j++) {
+
+    data.offer.photos.forEach(function (elem) {
       var picturesEl = document.createElement('li');
       var img = document.createElement('img');
       img.width = IMG_WIDTH;
       img.height = IMG_HEIGHT;
       picturesEl.appendChild(img);
-      img.src = data.offer.photos[j];
-      picturesEl.src = data.offer.photos;
+      img.src = elem;
+      picturesEl.src = elem;
       picturesFragment.appendChild(picturesEl);
-    }
+    });
     pictures.innerHTML = '';
     pictures.appendChild(picturesFragment);
     return cardElement.innerHTML;
