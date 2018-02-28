@@ -24,11 +24,12 @@
       + data.offer.checkout;
 
     var featuresFragment = document.createDocumentFragment(); // создаём фрагмент документа, куда будем вставлять фичи
-    for (var k = 0; k < data.offer.features.length; k++) {
+
+    data.offer.features.forEach(function (elem) {
       var li = document.createElement('li');
-      li.className = 'feature  feature--' + data.offer.features[k];
+      li.className = 'feature  feature--' + elem;
       featuresFragment.appendChild(li);
-    }
+    });
 
     cardFeatures.innerHTML = '';
     cardFeatures.appendChild(featuresFragment);
