@@ -23,7 +23,7 @@
     window.backend.load(function (data) {
       window.data.flats = data;
       window.data.photos = data;
-      if (callback !== 'undefined') {
+      if (callback) {
         callback();
       }
     }, function (message) {
