@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   // создаём объект с типами квартир
-  var HOUSE_TYPES = {
+  var HoseTypes = {
     'flat': 'Квартира',
     'house': 'Дом',
     'bungalo': 'Бунгало',
@@ -11,8 +11,6 @@
   var flats = [];
 
   var photos = [];
-
-  var checkInCheckOut = ['12:00', '13:00', '14:00'];
 
   var errorHandler = function (message) {
     var el = document.createElement('DIV');
@@ -25,7 +23,7 @@
     window.backend.load(function (data) {
       window.data.flats = data;
       window.data.photos = data;
-      if (callback !== 'undefined') {
+      if (callback) {
         callback();
       }
     }, function (message) {
@@ -36,8 +34,7 @@
   window.data = {
     getOffersFromServer: getOffersFromServer,
     flats: flats,
-    HOUSE_TYPES: HOUSE_TYPES,
-    checkInCheckOut: checkInCheckOut,
+    HoseTypes: HoseTypes,
     photos: photos
   };
 })();
