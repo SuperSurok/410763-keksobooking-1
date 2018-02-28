@@ -141,9 +141,9 @@
   var removePins = function () {
     var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
     window.showCard.removeCard();
-    pins.forEach(function (evt) {
-      evt.remove();
-    });
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+    }
   };
 
   function debounce(callback, timeout) {

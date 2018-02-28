@@ -91,9 +91,10 @@
   };
 
   var clearPhotoThumbnail = function () {
-    formPhotoContainer.querySelectorAll('.thumbnail').forEach(function (thumbnail) {
-      thumbnail.remove();
-    });
+    var formThumbnails = formPhotoContainer.querySelectorAll('.thumbnail');
+    for (var i = 0; i < formThumbnails.length; i++) {
+      formThumbnails[i].remove();
+    }
   };
 
   // валидация формы
