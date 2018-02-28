@@ -4,7 +4,7 @@
   var CODE_SUCCESS = 200;
   var TIME_OUT = 4000;
 
-  function init(onSuccess, onError) {
+  var init = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = TIME_OUT;
@@ -21,20 +21,24 @@
       onError('Запорс не выполнился за ' + xhr.timeout + 'мс');
     });
     return xhr;
-  }
+  };
+
+  // отправить на сервер
+  var upLoad = function (data, onLoad, onError) {
+    var xhr = init(onLoad, onError);
+    xhr.open('POST', URL);
+    xhr.send(data);
+  };
+
+  // получение данных с сервера
+  var load = function (onLoad, onError) {
+    var xhr = init(onLoad, onError);
+    xhr.open('GET', URL + '/data');
+    xhr.send();
+  };
 
   window.backend = {
-    // отправить на сервер
-    upLoad: function (data, onLoad, onError) {
-      var xhr = init(onLoad, onError);
-      xhr.open('POST', URL);
-      xhr.send(data);
-    },
-    // получение данных с сервера
-    load: function (onLoad, onError) {
-      var xhr = init(onLoad, onError);
-      xhr.open('GET', URL + '/data');
-      xhr.send();
-    }
+    upLoad: upLoad,
+    load: load
   };
 })();
