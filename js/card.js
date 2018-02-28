@@ -15,7 +15,7 @@
 
 
     cardTitle.textContent = data.offer.title;
-    cardPrice.textContent = data.offer.price + ' &#x20bd;/ночь';
+    cardPrice.innerHTML = data.offer.price + ' &#x20bd;/ночь';
     cardAddress.textContent = data.offer.address;
     cardFlatType.textContent = window.data.HOUSE_TYPES[data.offer.type];
 
