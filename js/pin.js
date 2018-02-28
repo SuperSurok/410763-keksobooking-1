@@ -10,11 +10,17 @@
     bottom: 700
   };
 
+  var MARKER_LOCATION_X = 4;
+  var MARKER_LOCATION_Y = 40;
+
   var MAIN_PIN_TOP_OFFSET = 48;
   var PARSE_INT_RADIX = 10;
 
   var PINS_LIMIT = 5;
   var DEBOUNCE_TIMEOUT_DEFAULT = 500;
+
+  var LOW_PRICE = 10000;
+  var HIGH_PRICE = 50000;
 
   var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
   var mapPin = document.querySelectorAll('.map__pin');
@@ -29,6 +35,15 @@
   var filterRooms = filterForm.querySelector('#housing-rooms');
   var filterGuests = filterForm.querySelector('#housing-guests');
   var featuresFieldSet = filterForm.querySelector('#housing-features');
+
+
+  var filters = {
+    'type': filterType.value,
+    'price': filterPrice.value,
+    'rooms': filterRooms.value,
+    'guests': filterGuests.value,
+    'features': []
+  };
 
   var dragPinLimits = {
     minX: 200,
@@ -48,7 +63,7 @@
     }
   };
 
-  var onPinBind = function (marker, offer) {
+  var pinBindHandler = function (marker, offer) {
     makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
     makeActive(marker, true);
     window.showCard.removeCard();
@@ -57,41 +72,41 @@
 
   var pinBind = function (marker, offer) {
     marker.addEventListener('click', function () {
-      onPinBind([marker], offer);
+      pinBindHandler([marker], offer);
     });
   };
 
   // функция создания меток
-  function renderMapPinsCard(pinsList) {
+  var renderMapPinsCard = function (pinsList) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < pinsList.length && i < PINS_LIMIT; i++) {
       var pin = pinsList[i];
       var marker = document.createElement('button');
-      marker.style.left = pin.location.x - 4 + 'px';
-      marker.style.top = pin.location.y - 40 + 'px';
+      marker.style.left = pin.location.x - MARKER_LOCATION_X + 'px';
+      marker.style.top = pin.location.y - MARKER_LOCATION_Y + 'px';
       marker.className = 'map__pin';
       marker.innerHTML = '<img src="' + pin.author.avatar + '" width="40" height="40" draggable="false">';
       pinBind(marker, pin);
       fragment.appendChild(marker);
     }
     mapPinsCard.appendChild(fragment);
-  }
+  };
 
 
-  function mapPinMainHandle(e) {
-    e.preventDefault();
+  var mapPinMainHandle = function (evt) {
+    evt.preventDefault();
 
     // начальные координаты
     var startCoords = {
-      x: e.clientX,
-      y: e.clientY
+      x: evt.clientX,
+      y: evt.clientY
     };
 
     var shift = {};
     var markerCoords = {};
 
     // функция перермещения метки
-    function onMouseMove(moveEvt) {
+    var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
       shift = {
@@ -117,7 +132,7 @@
 
       mapPinMain.style.left = markerCoords.x + 'px';
       mapPinMain.style.top = markerCoords.y + 'px';
-    }
+    };
 
 
     var onMouseUp = function (upEvt) {
@@ -132,7 +147,7 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
 
-  }
+  };
 
   mapPinMain.addEventListener('mousedown', mapPinMainHandle);
 
@@ -141,57 +156,57 @@
   var removePins = function () {
     var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
     window.showCard.removeCard();
-    pins.forEach(function (e) {
-      e.remove();
-    });
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+    }
   };
 
-  function debounce(callback, timeout) {
+  var debounce = function (callback, timeout) {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }
     lastTimeout = window.setTimeout(callback, timeout);
-  }
+  };
 
 
-  function filterByType(offer, filter) {
+  var filterByType = function (offer, filter) {
     return (filter.type === offer.offer.type);
-  }
+  };
 
-  function filterByPrice(offer, filter) {
+  var filterByPrice = function (offer, filter) {
     var result = true;
     switch (filter.price) {
       case 'middle':
         // 10000 - 50000₽
-        if (offer.offer.price < 10000 || offer.offer.price > 50000) {
+        if (offer.offer.price < LOW_PRICE || offer.offer.price > HIGH_PRICE) {
           result = false;
         }
         break;
       case 'low':
         // до 10000₽
-        if (offer.offer.price > 10000) {
+        if (offer.offer.price > LOW_PRICE) {
           result = false;
         }
         break;
       case 'high':
         // от 50000₽
-        if (offer.offer.price < 50000) {
+        if (offer.offer.price < HIGH_PRICE) {
           result = false;
         }
         break;
     }
     return result;
-  }
+  };
 
-  function filterByRooms(offer, filter) {
+  var filterByRooms = function (offer, filter) {
     return (parseInt(filter.rooms, 10) === parseInt(offer.offer.rooms, 10));
-  }
+  };
 
-  function filterByGuests(offer, filter) {
+  var filterByGuests = function (offer, filter) {
     return (parseInt(filter.guests, 10) === parseInt(offer.offer.guests, 10));
-  }
+  };
 
-  function filterByFeatures(offer, filter) {
+  var filterByFeatures = function (offer, filter) {
     var result = true;
     filter.features.forEach(function (feature) {
       if (offer.offer.features.indexOf(feature) < 0) {
@@ -199,28 +214,20 @@
       }
     });
     return result;
-  }
+  };
+
 
   filterForm.addEventListener('change', function () {
+    var offers = window.data.flats;
+    var filteredOffers = offers;
 
     debounce(function () {
       removePins();
-
-      var filters = {
-        'type': filterType.value,
-        'price': filterPrice.value,
-        'rooms': filterRooms.value,
-        'guests': filterGuests.value,
-        'features': []
-      };
 
       var selectedFeatures = featuresFieldSet.querySelectorAll('input[type=checkbox]:checked');
       selectedFeatures.forEach(function (feature) {
         filters.features.push(feature.value);
       });
-
-      var offers = window.data.flats;
-      var filteredOffers = offers;
 
       if (filters.type !== 'any') {
         filteredOffers = filteredOffers.filter(function (offer) {
@@ -251,11 +258,12 @@
           return filterByFeatures(offer, filters);
         });
       }
-
       renderMapPinsCard(filteredOffers);
     }, DEBOUNCE_TIMEOUT_DEFAULT);
 
   });
+
+
   window.pin = {
     renderMapPinsCard: renderMapPinsCard,
     makeActive: makeActive,

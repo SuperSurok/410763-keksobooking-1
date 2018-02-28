@@ -2,28 +2,35 @@
 (function () {
   var FORM_CHECKINS = ['12:00', '13:00', '14:00'];
   var FORM_CHECKOUTS = ['12:00', '13:00', '14:00'];
-  var FORM_TYPES = ['flat', 'bungalo', 'hose', 'palace'];
-  var FORM_TYPES_MIN_PRICES = [1000, 0, 5000, 10000];
+  var FORM_TYPES = ['bungalo', 'flat', 'house', 'palace'];
+  var FORM_TYPES_MIN_PRICES = [0, 1000, 5000, 10000];
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
   var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
 
   var DEFAULT_AVATAR = 'img/muffin.png';
 
+  // Макс и мин количество символов для описания
+  var DESCRIPTION_MIN_SYMBOLS = 30;
+  var DESCRIPTION_MAX_SYMBOLS = 100;
+
+  // Макс значение стоимости квартиры
+  var MAX_PRICE_FLAT = 1000000;
+
   // Поля формы
   var form = document.querySelector('.notice__form');
-  var formTypeFlat = document.querySelector('#type');
-  var formPriceFlat = document.querySelector('#price');
-  var formTimein = document.querySelector('#timein');
-  var formTimeout = document.querySelector('#timeout');
-  var formRoomNumber = document.querySelector('#room_number');
-  var formRoomCapacity = document.querySelector('#capacity');
-  var formAddress = document.querySelector('#address');
-  var formTitle = document.querySelector('#title');
-  var formPhotoContainer = document.querySelector('.form__photo-container');
+  var formTypeFlat = form.querySelector('#type');
+  var formPriceFlat = form.querySelector('#price');
+  var formTimein = form.querySelector('#timein');
+  var formTimeout = form.querySelector('#timeout');
+  var formRoomNumber = form.querySelector('#room_number');
+  var formRoomCapacity = form.querySelector('#capacity');
+  var formAddress = form.querySelector('#address');
+  var formTitle = form.querySelector('#title');
+  var formPhotoContainer = form.querySelector('.form__photo-container');
 
-  var fieldset = document.querySelectorAll('fieldset');
-  var userAvatar = document.querySelector('#avatar');
-  var images = document.querySelector('#images');
+  var fieldset = form.querySelectorAll('fieldset');
+  var userAvatar = form.querySelector('#avatar');
+  var images = form.querySelector('#images');
 
 
   // активация формы
@@ -55,8 +62,6 @@
   window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
   window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
   window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
-  window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
-
 
   var clearForm = function () {
     form.reset();
@@ -67,7 +72,7 @@
   };
 
 
-  var errorHandle = function (message) {
+  var MessageErrorHandle = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
@@ -86,21 +91,22 @@
 
   var showImagePreview = function (image, file) {
     var reader = new FileReader();
-    reader.onload = function (e) {
-      image.src = e.target.result;
+    reader.onload = function (evt) {
+      image.src = evt.target.result;
     };
     reader.readAsDataURL(file);
   };
 
   var clearPhotoThumbnail = function () {
-    formPhotoContainer.querySelectorAll('.thumbnail').forEach(function (thumbnail) {
-      thumbnail.remove();
-    });
+    var formThumbnails = formPhotoContainer.querySelectorAll('.thumbnail');
+    for (var i = 0; i < formThumbnails.length; i++) {
+      formThumbnails[i].remove();
+    }
   };
 
   // валидация формы
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
 
     var errors = [];
 
@@ -113,7 +119,7 @@
     }
 
     // проверка поля описания
-    if (formTitle.value.length < 30 || formTitle.value.length > 100) {
+    if (formTitle.value.length < DESCRIPTION_MIN_SYMBOLS || formTitle.value.length > DESCRIPTION_MAX_SYMBOLS) {
       errorData(formTitle, true);
       errors.push(['formTitle', 'Заголовок должен быть не меньше 30 и не больше 100 символов']);
     } else {
@@ -121,15 +127,15 @@
     }
 
     // проверка поля цены
-    if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > 1000000 || isNaN(parseInt(formPriceFlat.value, 10))) {
+    if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
       errorData(formPriceFlat, true);
-      errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + 1000000]);
+      errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + MAX_PRICE_FLAT]);
     } else {
       errorData(formPriceFlat, false);
     }
 
     if (!errors.length) {
-      window.backend.upLoad(new FormData(form), clearForm, errorHandle);
+      window.backend.upLoad(new FormData(form), clearForm, MessageErrorHandle);
     }
   });
 
@@ -142,22 +148,20 @@
 
   images.addEventListener('change', function () {
     clearPhotoThumbnail();
-    if (images.files.length > 0) {
-      for (var i = 0; i < images.files.length; i++) {
-        var imageThumbnailContainer = document.createElement('div');
-        imageThumbnailContainer.classList.add('thumbnail');
-        imageThumbnailContainer.style.border = '1px solid silver';
-        imageThumbnailContainer.style.borderRadius = '5px';
-        imageThumbnailContainer.style.height = '100px';
-        imageThumbnailContainer.style.padding = '5px';
-        imageThumbnailContainer.style.float = 'left';
-        imageThumbnailContainer.style.margin = '5px 5px 0px 0';
-        var imageThumbnail = document.createElement('img');
-        imageThumbnail.style.maxHeight = '100%';
-        showImagePreview(imageThumbnail, images.files[i]);
-        imageThumbnailContainer.appendChild(imageThumbnail);
-        formPhotoContainer.appendChild(imageThumbnailContainer);
-      }
+    for (var i = 0; i < images.files.length; i++) {
+      var imageThumbnailContainer = document.createElement('div');
+      imageThumbnailContainer.classList.add('thumbnail');
+      imageThumbnailContainer.style.border = '1px solid silver';
+      imageThumbnailContainer.style.borderRadius = '5px';
+      imageThumbnailContainer.style.height = '100px';
+      imageThumbnailContainer.style.padding = '5px';
+      imageThumbnailContainer.style.float = 'left';
+      imageThumbnailContainer.style.margin = '5px 5px 0px 0';
+      var imageThumbnail = document.createElement('img');
+      imageThumbnail.style.maxHeight = '100%';
+      showImagePreview(imageThumbnail, images.files[i]);
+      imageThumbnailContainer.appendChild(imageThumbnail);
+      formPhotoContainer.appendChild(imageThumbnailContainer);
     }
   });
 
