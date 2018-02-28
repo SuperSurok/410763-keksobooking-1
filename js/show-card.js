@@ -38,7 +38,7 @@
   };
 
   // отображаем метки и карточки квартир на экране
-  function showCard(offer) {
+  var showCard = function (offer) {
     // генерация карточки
     var offerElement = OFFER_TEMPLATE.querySelector('article.map__card').cloneNode(true);
 
@@ -57,7 +57,7 @@
     popupClose.addEventListener('click', removeCard);
     document.addEventListener('keydown', popupCloseEscape);
     popupClose.addEventListener('keydown', popupCloseEnter);
-  }
+  };
 
   window.showCard = {
     showCard: showCard,

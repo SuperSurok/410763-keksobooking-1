@@ -62,7 +62,7 @@
   };
 
   // функция создания меток
-  function renderMapPinsCard(pinsList) {
+  var renderMapPinsCard = function (pinsList) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < pinsList.length && i < PINS_LIMIT; i++) {
       var pin = pinsList[i];
@@ -75,7 +75,7 @@
       fragment.appendChild(marker);
     }
     mapPinsCard.appendChild(fragment);
-  }
+  };
 
 
   var mapPinMainHandle = function (evt) {

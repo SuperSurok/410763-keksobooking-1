@@ -3,7 +3,7 @@
 
   var mapInited = false;
 
-  function init() {
+  var init = function () {
     if (!mapInited) {
       var map = document.querySelector('.map');
       map.classList.remove('map--faded');
@@ -13,7 +13,7 @@
       });
       mapInited = true;
     }
-  }
+  };
 
   window.map = {
     init: init

@@ -3,7 +3,7 @@
 
   // функция для генерации новых карточек с информацией
 
-  function renderCardHouse(data, cardElement) {
+  var renderCardHouse = function (data, cardElement) {
 
     var cardTitle = cardElement.querySelector('h3');
     var cardAvatar = cardElement.querySelector('.popup__avatar');
@@ -50,7 +50,7 @@
     cardAvatar.src = data.author.avatar;
     return cardElement.innerHTML;
 
-  }
+  };
 
   window.card = {
     renderCardHouse: renderCardHouse
