@@ -141,22 +141,20 @@
 
   images.addEventListener('change', function () {
     clearPhotoThumbnail();
-    if (images.files.length > 0) {
-      for (var i = 0; i < images.files.length; i++) {
-        var imageThumbnailContainer = document.createElement('div');
-        imageThumbnailContainer.classList.add('thumbnail');
-        imageThumbnailContainer.style.border = '1px solid silver';
-        imageThumbnailContainer.style.borderRadius = '5px';
-        imageThumbnailContainer.style.height = '100px';
-        imageThumbnailContainer.style.padding = '5px';
-        imageThumbnailContainer.style.float = 'left';
-        imageThumbnailContainer.style.margin = '5px 5px 0px 0';
-        var imageThumbnail = document.createElement('img');
-        imageThumbnail.style.maxHeight = '100%';
-        showImagePreview(imageThumbnail, images.files[i]);
-        imageThumbnailContainer.appendChild(imageThumbnail);
-        formPhotoContainer.appendChild(imageThumbnailContainer);
-      }
+    for (var i = 0; i < images.files.length; i++) {
+      var imageThumbnailContainer = document.createElement('div');
+      imageThumbnailContainer.classList.add('thumbnail');
+      imageThumbnailContainer.style.border = '1px solid silver';
+      imageThumbnailContainer.style.borderRadius = '5px';
+      imageThumbnailContainer.style.height = '100px';
+      imageThumbnailContainer.style.padding = '5px';
+      imageThumbnailContainer.style.float = 'left';
+      imageThumbnailContainer.style.margin = '5px 5px 0px 0';
+      var imageThumbnail = document.createElement('img');
+      imageThumbnail.style.maxHeight = '100%';
+      showImagePreview(imageThumbnail, images.files[i]);
+      imageThumbnailContainer.appendChild(imageThumbnail);
+      formPhotoContainer.appendChild(imageThumbnailContainer);
     }
   });
 
