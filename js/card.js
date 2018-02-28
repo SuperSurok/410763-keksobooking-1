@@ -17,7 +17,7 @@
     cardTitle.textContent = data.offer.title;
     cardPrice.innerHTML = data.offer.price + ' &#x20bd;/ночь';
     cardAddress.textContent = data.offer.address;
-    cardFlatType.textContent = window.data.HOUSE_TYPES[data.offer.type];
+    cardFlatType.textContent = window.data.HoseTypes[data.offer.type];
 
     cardFlatType.nextElementSibling.textContent = data.offer.rooms + ' комнаты' + ' для ' + data.offer.guests + ' гостей';
     cardFlatType.nextElementSibling.nextElementSibling.textContent = 'Заезд после ' + data.offer.checkin + ' ,' + 'выезд до '

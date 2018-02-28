@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   // создаём объект с типами квартир
-  var HOUSE_TYPES = {
+  var HoseTypes = {
     'flat': 'Квартира',
     'house': 'Дом',
     'bungalo': 'Бунгало',
@@ -36,7 +36,7 @@
   window.data = {
     getOffersFromServer: getOffersFromServer,
     flats: flats,
-    HOUSE_TYPES: HOUSE_TYPES,
+    HoseTypes: HoseTypes,
     CHECK_IN_CHECK_OUT: CHECK_IN_CHECK_OUT,
     photos: photos
   };
