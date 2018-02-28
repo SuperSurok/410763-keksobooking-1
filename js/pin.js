@@ -36,6 +36,15 @@
   var filterGuests = filterForm.querySelector('#housing-guests');
   var featuresFieldSet = filterForm.querySelector('#housing-features');
 
+
+  var filters = {
+    'type': filterType.value,
+    'price': filterPrice.value,
+    'rooms': filterRooms.value,
+    'guests': filterGuests.value,
+    'features': []
+  };
+
   var dragPinLimits = {
     minX: 200,
     maxX: map.clientWidth - 200,
@@ -207,26 +216,18 @@
     return result;
   };
 
+
   filterForm.addEventListener('change', function () {
+    var offers = window.data.flats;
+    var filteredOffers = offers;
 
     debounce(function () {
       removePins();
-
-      var filters = {
-        'type': filterType.value,
-        'price': filterPrice.value,
-        'rooms': filterRooms.value,
-        'guests': filterGuests.value,
-        'features': []
-      };
 
       var selectedFeatures = featuresFieldSet.querySelectorAll('input[type=checkbox]:checked');
       selectedFeatures.forEach(function (feature) {
         filters.features.push(feature.value);
       });
-
-      var offers = window.data.flats;
-      var filteredOffers = offers;
 
       if (filters.type !== 'any') {
         filteredOffers = filteredOffers.filter(function (offer) {
@@ -257,11 +258,12 @@
           return filterByFeatures(offer, filters);
         });
       }
-
       renderMapPinsCard(filteredOffers);
     }, DEBOUNCE_TIMEOUT_DEFAULT);
 
   });
+
+
   window.pin = {
     renderMapPinsCard: renderMapPinsCard,
     makeActive: makeActive,
