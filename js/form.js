@@ -18,19 +18,19 @@
 
   // Поля формы
   var form = document.querySelector('.notice__form');
-  var formTypeFlat = document.querySelector('#type');
-  var formPriceFlat = document.querySelector('#price');
-  var formTimein = document.querySelector('#timein');
-  var formTimeout = document.querySelector('#timeout');
-  var formRoomNumber = document.querySelector('#room_number');
-  var formRoomCapacity = document.querySelector('#capacity');
-  var formAddress = document.querySelector('#address');
-  var formTitle = document.querySelector('#title');
-  var formPhotoContainer = document.querySelector('.form__photo-container');
+  var formTypeFlat = form.querySelector('#type');
+  var formPriceFlat = form.querySelector('#price');
+  var formTimein = form.querySelector('#timein');
+  var formTimeout = form.querySelector('#timeout');
+  var formRoomNumber = form.querySelector('#room_number');
+  var formRoomCapacity = form.querySelector('#capacity');
+  var formAddress = form.querySelector('#address');
+  var formTitle = form.querySelector('#title');
+  var formPhotoContainer = form.querySelector('.form__photo-container');
 
-  var fieldset = document.querySelectorAll('fieldset');
-  var userAvatar = document.querySelector('#avatar');
-  var images = document.querySelector('#images');
+  var fieldset = form.querySelectorAll('fieldset');
+  var userAvatar = form.querySelector('#avatar');
+  var images = form.querySelector('#images');
 
 
   // активация формы
