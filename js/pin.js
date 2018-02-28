@@ -37,14 +37,6 @@
   var featuresFieldSet = filterForm.querySelector('#housing-features');
 
 
-  var filters = {
-    'type': filterType.value,
-    'price': filterPrice.value,
-    'rooms': filterRooms.value,
-    'guests': filterGuests.value,
-    'features': []
-  };
-
   var dragPinLimits = {
     minX: 200,
     maxX: map.clientWidth - 200,
@@ -218,6 +210,15 @@
 
 
   filterForm.addEventListener('change', function () {
+
+    var filters = {
+      'type': filterType.value,
+      'price': filterPrice.value,
+      'rooms': filterRooms.value,
+      'guests': filterGuests.value,
+      'features': []
+    };
+
     var offers = window.data.flats;
     var filteredOffers = offers;
 
