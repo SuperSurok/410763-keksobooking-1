@@ -148,7 +148,7 @@
 
   images.addEventListener('change', function () {
     clearPhotoThumbnail();
-    for (var i = 0; i < images.files.length; i++) {
+    [].forEach.call(images.files, (function (elem) {
       var imageThumbnailContainer = document.createElement('div');
       imageThumbnailContainer.classList.add('thumbnail');
       imageThumbnailContainer.style.border = '1px solid silver';
@@ -159,10 +159,10 @@
       imageThumbnailContainer.style.margin = '5px 5px 0px 0';
       var imageThumbnail = document.createElement('img');
       imageThumbnail.style.maxHeight = '100%';
-      showImagePreview(imageThumbnail, images.files[i]);
+      showImagePreview(imageThumbnail, elem);
       imageThumbnailContainer.appendChild(imageThumbnail);
       formPhotoContainer.appendChild(imageThumbnailContainer);
-    }
+    }));
   });
 
   form.addEventListener('reset', function () {
