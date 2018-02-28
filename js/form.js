@@ -9,6 +9,13 @@
 
   var DEFAULT_AVATAR = 'img/muffin.png';
 
+  // Макс и мин количество символов для описания
+  var DESCRIPTION_MIN_SYMBOLS = 30;
+  var DESCRIPTION_MAX_SYMBOLS = 100;
+
+  // Макс значение стоимости квартиры
+  var MAX_PRICE_FLAT = 1000000;
+
   // Поля формы
   var form = document.querySelector('.notice__form');
   var formTypeFlat = document.querySelector('#type');
@@ -112,7 +119,7 @@
     }
 
     // проверка поля описания
-    if (formTitle.value.length < 30 || formTitle.value.length > 100) {
+    if (formTitle.value.length < DESCRIPTION_MIN_SYMBOLS || formTitle.value.length > DESCRIPTION_MAX_SYMBOLS) {
       errorData(formTitle, true);
       errors.push(['formTitle', 'Заголовок должен быть не меньше 30 и не больше 100 символов']);
     } else {
@@ -120,9 +127,9 @@
     }
 
     // проверка поля цены
-    if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > 1000000 || isNaN(parseInt(formPriceFlat.value, 10))) {
+    if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
       errorData(formPriceFlat, true);
-      errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + 1000000]);
+      errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + MAX_PRICE_FLAT]);
     } else {
       errorData(formPriceFlat, false);
     }

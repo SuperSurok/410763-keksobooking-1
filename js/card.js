@@ -1,6 +1,9 @@
 'use strict';
 (function () {
 
+  var IMG_WIDTH = 70;
+  var IMG_HEIGHT = 70;
+
   // функция для генерации новых карточек с информацией
 
   var renderCardHouse = function (data, cardElement) {
@@ -34,8 +37,8 @@
     for (var j = 0; j < data.offer.photos.length; j++) {
       var picturesEl = document.createElement('li');
       var img = document.createElement('img');
-      img.width = 70;
-      img.height = 70;
+      img.width = IMG_WIDTH;
+      img.height = IMG_HEIGHT;
       picturesEl.appendChild(img);
       img.src = data.offer.photos[j];
       picturesEl.src = data.offer.photos;

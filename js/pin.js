@@ -10,11 +10,17 @@
     bottom: 700
   };
 
+  var MARKER_LOCATION_X = 4;
+  var MARKER_LOCATION_Y = 40;
+
   var MAIN_PIN_TOP_OFFSET = 48;
   var PARSE_INT_RADIX = 10;
 
   var PINS_LIMIT = 5;
   var DEBOUNCE_TIMEOUT_DEFAULT = 500;
+
+  var LOW_PRICE = 10000;
+  var HIGH_PRICE = 50000;
 
   var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
   var mapPin = document.querySelectorAll('.map__pin');
@@ -67,8 +73,8 @@
     for (var i = 0; i < pinsList.length && i < PINS_LIMIT; i++) {
       var pin = pinsList[i];
       var marker = document.createElement('button');
-      marker.style.left = pin.location.x - 4 + 'px';
-      marker.style.top = pin.location.y - 40 + 'px';
+      marker.style.left = pin.location.x - MARKER_LOCATION_X + 'px';
+      marker.style.top = pin.location.y - MARKER_LOCATION_Y + 'px';
       marker.className = 'map__pin';
       marker.innerHTML = '<img src="' + pin.author.avatar + '" width="40" height="40" draggable="false">';
       pinBind(marker, pin);
@@ -163,19 +169,19 @@
     switch (filter.price) {
       case 'middle':
         // 10000 - 50000₽
-        if (offer.offer.price < 10000 || offer.offer.price > 50000) {
+        if (offer.offer.price < LOW_PRICE || offer.offer.price > HIGH_PRICE) {
           result = false;
         }
         break;
       case 'low':
         // до 10000₽
-        if (offer.offer.price > 10000) {
+        if (offer.offer.price > LOW_PRICE) {
           result = false;
         }
         break;
       case 'high':
         // от 50000₽
-        if (offer.offer.price < 50000) {
+        if (offer.offer.price < HIGH_PRICE) {
           result = false;
         }
         break;
