@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var URL = 'https://js.dump.academy/keksobooking';
   var CODE_SUCCESS = 200;
   var TIME_OUT = 4000;
 
@@ -25,16 +26,14 @@
   window.backend = {
     // отправить на сервер
     upLoad: function (data, onLoad, onError) {
-      var URL = 'https://js.dump.academy/keksobooking';
       var xhr = init(onLoad, onError);
       xhr.open('POST', URL);
       xhr.send(data);
     },
     // получение данных с сервера
     load: function (onLoad, onError) {
-      var URL = 'https://js.dump.academy/keksobooking/data';
       var xhr = init(onLoad, onError);
-      xhr.open('GET', URL);
+      xhr.open('GET', URL + '/data');
       xhr.send();
     }
   };
