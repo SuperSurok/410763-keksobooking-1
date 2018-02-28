@@ -43,6 +43,7 @@
     var offerElement = OFFER_TEMPLATE.querySelector('article.map__card').cloneNode(true);
 
     offerElement.innerHTML = window.card.renderCardHouse(offer, offerElement);
+    offerElement.innerHTML = window.card.paintPictures(offer, offerElement);
     offerElement.style.top = '80px';
     offerElement.style.width = '300px';
 

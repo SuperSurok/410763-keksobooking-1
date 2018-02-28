@@ -5,7 +5,6 @@
   var IMG_HEIGHT = 70;
 
   // функция для генерации новых карточек с информацией
-
   var renderCardHouse = function (data, cardElement) {
 
     var cardTitle = cardElement.querySelector('h3');
@@ -14,8 +13,6 @@
     var cardPrice = cardElement.querySelector('.popup__price');
     var cardFeatures = cardElement.querySelector('.popup__features');
     var cardFlatType = cardElement.querySelector('h4');
-    var pictures = cardElement.querySelector('.popup__pictures');
-
 
     cardTitle.textContent = data.offer.title;
     cardPrice.innerHTML = data.offer.price + ' &#x20bd;/ночь';
@@ -33,6 +30,19 @@
       featuresFragment.appendChild(li);
     }
 
+    cardFeatures.innerHTML = '';
+    cardFeatures.appendChild(featuresFragment);
+    cardFeatures.nextElementSibling.textContent = data.offer.description;
+    cardAvatar.src = data.author.avatar;
+    return cardElement.innerHTML;
+
+  };
+
+  // вставляем фото в карточку с информацией
+  var paintPictures = function (data, cardElement) {
+
+    var pictures = cardElement.querySelector('.popup__pictures');
+
     var picturesFragment = document.createDocumentFragment();
     for (var j = 0; j < data.offer.photos.length; j++) {
       var picturesEl = document.createElement('li');
@@ -46,17 +56,13 @@
     }
     pictures.innerHTML = '';
     pictures.appendChild(picturesFragment);
-
-    cardFeatures.innerHTML = '';
-    cardFeatures.appendChild(featuresFragment);
-    cardFeatures.nextElementSibling.textContent = data.offer.description;
-    cardAvatar.src = data.author.avatar;
     return cardElement.innerHTML;
-
   };
 
+
   window.card = {
-    renderCardHouse: renderCardHouse
+    renderCardHouse: renderCardHouse,
+    paintPictures: paintPictures
   };
 
 })();
