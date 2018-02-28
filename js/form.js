@@ -65,7 +65,7 @@
   };
 
 
-  var errorHandle = function (message) {
+  var MessageErrorHandle = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
@@ -127,7 +127,7 @@
     }
 
     if (!errors.length) {
-      window.backend.upLoad(new FormData(form), clearForm, errorHandle);
+      window.backend.upLoad(new FormData(form), clearForm, MessageErrorHandle);
     }
   });
 
