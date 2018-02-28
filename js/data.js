@@ -12,8 +12,6 @@
 
   var photos = [];
 
-  var CHECK_IN_CHECK_OUT = ['12:00', '13:00', '14:00'];
-
   var errorHandler = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
@@ -37,7 +35,6 @@
     getOffersFromServer: getOffersFromServer,
     flats: flats,
     HoseTypes: HoseTypes,
-    CHECK_IN_CHECK_OUT: CHECK_IN_CHECK_OUT,
     photos: photos
   };
 })();
