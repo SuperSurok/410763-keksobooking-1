@@ -84,8 +84,8 @@
 
   var showImagePreview = function (image, file) {
     var reader = new FileReader();
-    reader.onload = function (e) {
-      image.src = e.target.result;
+    reader.onload = function (evt) {
+      image.src = evt.target.result;
     };
     reader.readAsDataURL(file);
   };
@@ -97,8 +97,8 @@
   };
 
   // валидация формы
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
 
     var errors = [];
 
