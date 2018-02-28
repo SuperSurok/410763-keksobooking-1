@@ -78,13 +78,13 @@
   }
 
 
-  function mapPinMainHandle(e) {
-    e.preventDefault();
+  function mapPinMainHandle(evt) {
+    evt.preventDefault();
 
     // начальные координаты
     var startCoords = {
-      x: e.clientX,
-      y: e.clientY
+      x: evt.clientX,
+      y: evt.clientY
     };
 
     var shift = {};
@@ -141,8 +141,8 @@
   var removePins = function () {
     var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
     window.showCard.removeCard();
-    pins.forEach(function (e) {
-      e.remove();
+    pins.forEach(function (evt) {
+      evt.remove();
     });
   };
 
