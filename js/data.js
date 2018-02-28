@@ -12,7 +12,7 @@
 
   var photos = [];
 
-  var checkInCheckOut = ['12:00', '13:00', '14:00'];
+  var CHECK_IN_CHECK_OUT = ['12:00', '13:00', '14:00'];
 
   var errorHandler = function (message) {
     var el = document.createElement('DIV');
@@ -37,7 +37,7 @@
     getOffersFromServer: getOffersFromServer,
     flats: flats,
     HOUSE_TYPES: HOUSE_TYPES,
-    checkInCheckOut: checkInCheckOut,
+    CHECK_IN_CHECK_OUT: CHECK_IN_CHECK_OUT,
     photos: photos
   };
 })();
