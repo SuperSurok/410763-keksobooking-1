@@ -78,7 +78,7 @@
   }
 
 
-  function mapPinMainHandle(evt) {
+  var mapPinMainHandle = function (evt) {
     evt.preventDefault();
 
     // начальные координаты
@@ -91,7 +91,7 @@
     var markerCoords = {};
 
     // функция перермещения метки
-    function onMouseMove(moveEvt) {
+    var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
       shift = {
@@ -117,7 +117,7 @@
 
       mapPinMain.style.left = markerCoords.x + 'px';
       mapPinMain.style.top = markerCoords.y + 'px';
-    }
+    };
 
 
     var onMouseUp = function (upEvt) {
@@ -132,7 +132,7 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
 
-  }
+  };
 
   mapPinMain.addEventListener('mousedown', mapPinMainHandle);
 
@@ -146,19 +146,19 @@
     }
   };
 
-  function debounce(callback, timeout) {
+  var debounce = function (callback, timeout) {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }
     lastTimeout = window.setTimeout(callback, timeout);
-  }
+  };
 
 
-  function filterByType(offer, filter) {
+  var filterByType = function (offer, filter) {
     return (filter.type === offer.offer.type);
-  }
+  };
 
-  function filterByPrice(offer, filter) {
+  var filterByPrice = function (offer, filter) {
     var result = true;
     switch (filter.price) {
       case 'middle':
@@ -181,17 +181,17 @@
         break;
     }
     return result;
-  }
+  };
 
-  function filterByRooms(offer, filter) {
+  var filterByRooms = function (offer, filter) {
     return (parseInt(filter.rooms, 10) === parseInt(offer.offer.rooms, 10));
-  }
+  };
 
-  function filterByGuests(offer, filter) {
+  var filterByGuests = function (offer, filter) {
     return (parseInt(filter.guests, 10) === parseInt(offer.offer.guests, 10));
-  }
+  };
 
-  function filterByFeatures(offer, filter) {
+  var filterByFeatures = function (offer, filter) {
     var result = true;
     filter.features.forEach(function (feature) {
       if (offer.offer.features.indexOf(feature) < 0) {
@@ -199,7 +199,7 @@
       }
     });
     return result;
-  }
+  };
 
   filterForm.addEventListener('change', function () {
 
