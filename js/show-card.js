@@ -14,7 +14,7 @@
     for (var i = 0; i < popups.length; i++) {
       var popup = popups[i];
       popupClose.addEventListener('click', removeCardHandler);
-      popupClose.addEventListener('keydown', popupCloseEnter);
+      popupClose.addEventListener('keydown', popupCloseEnterHandler);
       popup.remove();
     }
     window.pin.makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
@@ -31,7 +31,7 @@
   };
 
   // удаляем карточку по нажатию на ENTER
-  var popupCloseEnter = function (keyDownEvt) {
+  var popupCloseEnterHandler = function (keyDownEvt) {
     if (document.activeElement === keyDownEvt.target && keyDownEvt.keyCode === ENTER_BUTTON) {
       removeCardHandler();
     }
@@ -57,7 +57,7 @@
     // повесить бинды
     popupClose.addEventListener('click', removeCardHandler);
     document.addEventListener('keydown', popupCloseEscapeHandler);
-    popupClose.addEventListener('keydown', popupCloseEnter);
+    popupClose.addEventListener('keydown', popupCloseEnterHandler);
   };
 
   window.showCard = {
