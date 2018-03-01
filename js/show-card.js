@@ -7,13 +7,13 @@
   var OFFER_TEMPLATE = document.querySelector('template').content;
 
   // скрываем карточки
-  var removeCardHandler = function () {
+  var pinPopupClickHandler = function () {
     var popups = document.querySelectorAll('.map__card.popup');
 
     var popupClose = document.querySelector('.popup__close');
     for (var i = 0; i < popups.length; i++) {
       var popup = popups[i];
-      popupClose.addEventListener('click', removeCardHandler);
+      popupClose.addEventListener('click', pinPopupClickHandler);
       popupClose.addEventListener('keydown', popupCloseEnterHandler);
       popup.remove();
     }
@@ -26,14 +26,14 @@
   // удаляем карточку по нажатию ESCAPE
   var popupCloseEscapeHandler = function (keyDownEvt) {
     if (keyDownEvt.keyCode === ESC_BUTTON) {
-      removeCardHandler();
+      pinPopupClickHandler();
     }
   };
 
   // удаляем карточку по нажатию на ENTER
   var popupCloseEnterHandler = function (keyDownEvt) {
     if (document.activeElement === keyDownEvt.target && keyDownEvt.keyCode === ENTER_BUTTON) {
-      removeCardHandler();
+      pinPopupClickHandler();
     }
   };
 
@@ -55,13 +55,13 @@
     var popupClose = document.querySelector('.popup__close');
 
     // повесить бинды
-    popupClose.addEventListener('click', removeCardHandler);
+    popupClose.addEventListener('click', pinPopupClickHandler);
     document.addEventListener('keydown', popupCloseEscapeHandler);
     popupClose.addEventListener('keydown', popupCloseEnterHandler);
   };
 
   window.showCard = {
     showCard: showCard,
-    removeCardHandler: removeCardHandler
+    pinPopupClickHandler: pinPopupClickHandler
   };
 })();
