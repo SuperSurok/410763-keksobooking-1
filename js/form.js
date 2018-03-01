@@ -67,12 +67,12 @@
     form.reset();
   };
 
-  var errorData = function (field, error) {
+  var errorDataShow = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
   };
 
 
-  var MessageErrorHandle = function (message) {
+  var messageErrorHandle = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
@@ -112,30 +112,30 @@
 
     // проверка поля адреса
     if (formAddress.value === '') {
-      errorData(formAddress, true);
+      errorDataShow(formAddress, true);
       errors.push(['formAddress', 'Заполните это поле']);
     } else {
-      errorData(formAddress, false);
+      errorDataShow(formAddress, false);
     }
 
     // проверка поля описания
     if (formTitle.value.length < DESCRIPTION_MIN_SYMBOLS || formTitle.value.length > DESCRIPTION_MAX_SYMBOLS) {
-      errorData(formTitle, true);
+      errorDataShow(formTitle, true);
       errors.push(['formTitle', 'Заголовок должен быть не меньше 30 и не больше 100 символов']);
     } else {
-      errorData(formTitle, false);
+      errorDataShow(formTitle, false);
     }
 
     // проверка поля цены
     if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
-      errorData(formPriceFlat, true);
+      errorDataShow(formPriceFlat, true);
       errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + MAX_PRICE_FLAT]);
     } else {
-      errorData(formPriceFlat, false);
+      errorDataShow(formPriceFlat, false);
     }
 
     if (!errors.length) {
-      window.backend.upLoad(new FormData(form), clearForm, MessageErrorHandle);
+      window.backend.upLoad(new FormData(form), clearForm, messageErrorHandle);
     }
   });
 
