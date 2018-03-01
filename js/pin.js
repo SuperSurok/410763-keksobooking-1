@@ -58,7 +58,7 @@
   var pinBindHandler = function (marker, offer) {
     makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
     makeActive(marker, true);
-    window.showCard.removeCard();
+    window.showCard.removeCardHandler();
     window.showCard.showCard(offer);
   };
 
@@ -147,7 +147,7 @@
 
   var removePins = function () {
     var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
-    window.showCard.removeCard();
+    window.showCard.removeCardHandler();
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove();
     }
