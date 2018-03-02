@@ -13,6 +13,7 @@
   var photos = [];
 
   var errorHandler = function (message) {
+    debugger;
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
@@ -23,7 +24,7 @@
     window.backend.load(function (data) {
       window.data.flats = data;
       window.data.photos = data;
-      if (callback) {
+      if (callback && typeof (callback) === 'function') {
         callback();
       }
     }, function (message) {
