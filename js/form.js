@@ -61,6 +61,7 @@
   window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
   window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
   window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
+  window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlMinValues);
   window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
 
   var clearForm = function () {
@@ -125,6 +126,16 @@
     } else {
       errorDataShow(formTitle, false);
     }
+
+
+    // проверка количества гостей
+    if (formRoomNumber.value !== formRoomCapacity.value) {
+      errorDataShow(formRoomCapacity, true);
+
+    } else {
+      errorDataShow(formRoomCapacity, false);
+    }
+
 
     // проверка поля цены
     if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
