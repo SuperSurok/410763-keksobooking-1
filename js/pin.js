@@ -85,7 +85,7 @@
   };
 
 
-  var mapPinMainHandle = function (evt) {
+  var mapPinMainHandler = function (evt) {
     evt.preventDefault();
 
     // начальные координаты
@@ -98,7 +98,7 @@
     var markerCoords = {};
 
     // функция перермещения метки
-    var onMouseMove = function (moveEvt) {
+    var onMouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
       shift = {
@@ -127,21 +127,21 @@
     };
 
 
-    var onMouseUp = function (upEvt) {
+    var onMouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMouseMoveHandler);
+      document.removeEventListener('mouseup', onMouseUpHandler);
       var address = document.querySelector('#address');
       address.value = 'x: ' + parseInt(mapPinMain.offsetLeft, PARSE_INT_RADIX) + ', ' + 'y: ' + (parseInt(mapPinMain.offsetTop, PARSE_INT_RADIX) + MAP_PIN_SIZES.height);
       window.map.init();
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMoveHandler);
+    document.addEventListener('mouseup', onMouseUpHandler);
 
   };
 
-  mapPinMain.addEventListener('mousedown', mapPinMainHandle);
+  mapPinMain.addEventListener('mousedown', mapPinMainHandler);
 
   // удаляем пины
 
