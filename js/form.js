@@ -46,7 +46,13 @@
   };
   disable(true);
 
-
+  /*
+    Согласно ТЗ при выборе количества комнат существуют следующие варианты выбора гостей:
+    1 комната — «для 1 гостя»;
+    2 комнаты — «для 2 гостей» или «для 1 гостя»;
+    3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
+    100 комнат — «не для гостей»;
+  */
   window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, window.syncFields.syncFormControlValues);
   window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, window.syncFields.syncFormControlValues);
   window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, window.syncFields.syncFormControlMinValues);
@@ -57,12 +63,12 @@
     form.reset();
   };
 
-  var errorDataShow = function (field, error) {
+  var showErrorData = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
   };
 
 
-  var messageErrorHandle = function (message) {
+  var showMessageError = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
@@ -102,30 +108,30 @@
 
     // проверка поля адреса
     if (formAddress.value === '') {
-      errorDataShow(formAddress, true);
+      showErrorData(formAddress, true);
       errors.push(['formAddress', 'Заполните это поле']);
     } else {
-      errorDataShow(formAddress, false);
+      showErrorData(formAddress, false);
     }
 
     // проверка поля описания
     if (formTitle.value.length < DESCRIPTION_MIN_SYMBOLS || formTitle.value.length > DESCRIPTION_MAX_SYMBOLS) {
-      errorDataShow(formTitle, true);
+      showErrorData(formTitle, true);
       errors.push(['formTitle', 'Заголовок должен быть не меньше 30 и не больше 100 символов']);
     } else {
-      errorDataShow(formTitle, false);
+      showErrorData(formTitle, false);
     }
 
     // проверка поля цены
     if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
-      errorDataShow(formPriceFlat, true);
+      showErrorData(formPriceFlat, true);
       errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + MAX_PRICE_FLAT]);
     } else {
-      errorDataShow(formPriceFlat, false);
+      showErrorData(formPriceFlat, false);
     }
 
     if (!errors.length) {
-      window.backend.upLoad(new FormData(form), clearForm, messageErrorHandle);
+      window.backend.upLoad(new FormData(form), clearForm, showMessageError);
     }
   });
 
@@ -164,7 +170,8 @@
     fieldset: fieldset,
     userAvatar: userAvatar,
     images: images,
-    disable: disable
+    disable: disable,
+    showMessageError: showMessageError
   };
 })();
 
