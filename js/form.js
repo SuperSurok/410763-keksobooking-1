@@ -47,24 +47,10 @@
   disable(true);
 
 
-  // Синхронизация атрибутов value
-  var syncFormControlValues = function (element, value) {
-    element.value = value;
-  };
-
-  // Задаём значение с минимальной ценой для типа квартиры
-  var syncFormControlMinValues = function (element, value) {
-    element.min = value;
-  };
-
-  var initFieldsSync = function (addListener) {
-    window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues, addListener);
-    window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues, addListener);
-    window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues, addListener);
-    window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, window.syncFields.setAllowedOptions, addListener);
-  };
-
-  initFieldsSync(true);
+  window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, window.syncFields.syncFormControlValues);
+  window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, window.syncFields.syncFormControlValues);
+  window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, window.syncFields.syncFormControlMinValues);
+  window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, window.syncFields.setAllowedOptions);
 
 
   var clearForm = function () {
@@ -172,9 +158,6 @@
   form.addEventListener('reset', function () {
     resetAvatar();
     clearPhotoThumbnail();
-    setTimeout(function () {
-      initFieldsSync(false);
-    }, 100);
   });
 
   window.form = {

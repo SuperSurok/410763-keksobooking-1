@@ -1,6 +1,17 @@
 'use strict';
 // модуль синхронизации полей
 (function () {
+
+  // Синхронизация атрибутов value
+  var syncFormControlValues = function (element, value) {
+    element.value = value;
+  };
+
+  // Задаём значение с минимальной ценой для типа квартиры
+  var syncFormControlMinValues = function (element, value) {
+    element.min = value;
+  };
+
   var syncFormControls = function (firstControl, secondControl, firstOptions, secondOptions, callbackFunctions) {
     if (typeof callbackFunctions === 'function') {
       callbackFunctions(secondControl, secondOptions[firstOptions.indexOf(firstControl.value)]);
@@ -24,6 +35,8 @@
 
   window.syncFields = {
     syncFormControls: syncFormControls,
-    setAllowedOptions: setAllowedOptions
+    setAllowedOptions: setAllowedOptions,
+    syncFormControlValues: syncFormControlValues,
+    syncFormControlMinValues: syncFormControlMinValues
   };
 })();
