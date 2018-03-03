@@ -170,8 +170,7 @@
     fieldset: fieldset,
     userAvatar: userAvatar,
     images: images,
-    disable: disable,
-    showMessageError: showMessageError
+    disable: disable
   };
 })();
 
