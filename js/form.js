@@ -131,7 +131,7 @@
     // проверка количества гостей
     if (formRoomNumber.value !== formRoomCapacity.value) {
       errorDataShow(formRoomCapacity, true);
-
+      errors.push(['formRoomCapacity', 'Заполните это поле']);
     } else {
       errorDataShow(formRoomCapacity, false);
     }
