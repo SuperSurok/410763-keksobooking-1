@@ -5,7 +5,7 @@
   var FORM_TYPES = ['bungalo', 'flat', 'house', 'palace'];
   var FORM_TYPES_MIN_PRICES = [0, 1000, 5000, 10000];
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
-  var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
+  var FORM_ROOM_CAPACITIES = [[1], [1, 2], [1, 2, 3], [0]];
 
   var DEFAULT_AVATAR = 'img/muffin.png';
 
@@ -57,12 +57,15 @@
     element.min = value;
   };
 
+  var initFieldsSync = function (addListener) {
+    window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues, addListener);
+    window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues, addListener);
+    window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues, addListener);
+    window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, window.syncFields.setAllowedOptions, addListener);
+  };
 
-  window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
-  window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
-  window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
-  window.syncFields.syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlMinValues);
-  window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
+  initFieldsSync(true);
+
 
   var clearForm = function () {
     form.reset();
@@ -127,16 +130,6 @@
       errorDataShow(formTitle, false);
     }
 
-
-    // проверка количества гостей
-    if (formRoomNumber.value !== formRoomCapacity.value) {
-      errorDataShow(formRoomCapacity, true);
-      errors.push(['formRoomCapacity', 'Заполните это поле']);
-    } else {
-      errorDataShow(formRoomCapacity, false);
-    }
-
-
     // проверка поля цены
     if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
       errorDataShow(formPriceFlat, true);
@@ -179,6 +172,9 @@
   form.addEventListener('reset', function () {
     resetAvatar();
     clearPhotoThumbnail();
+    setTimeout(function () {
+      initFieldsSync(false);
+    }, 100);
   });
 
   window.form = {
