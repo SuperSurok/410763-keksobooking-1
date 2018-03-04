@@ -7,33 +7,33 @@
   var OFFER_TEMPLATE = document.querySelector('template').content;
 
   // скрываем карточки
-  var removeCard = function () {
+  var pinPopupClickHandler = function () {
     var popups = document.querySelectorAll('.map__card.popup');
 
     var popupClose = document.querySelector('.popup__close');
     for (var i = 0; i < popups.length; i++) {
       var popup = popups[i];
-      popupClose.addEventListener('click', removeCard);
-      popupClose.addEventListener('keydown', popupCloseEnter);
+      popupClose.addEventListener('click', pinPopupClickHandler);
+      popupClose.addEventListener('keydown', popupCloseEnterHandler);
       popup.remove();
     }
     window.pin.makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
 
-    document.removeEventListener('keydown', popupCloseEscape);
+    document.removeEventListener('keydown', popupCloseEscapeHandler);
   };
 
 
   // удаляем карточку по нажатию ESCAPE
-  var popupCloseEscape = function (keyDownEvt) {
+  var popupCloseEscapeHandler = function (keyDownEvt) {
     if (keyDownEvt.keyCode === ESC_BUTTON) {
-      removeCard();
+      pinPopupClickHandler();
     }
   };
 
   // удаляем карточку по нажатию на ENTER
-  var popupCloseEnter = function (keyDownEvt) {
+  var popupCloseEnterHandler = function (keyDownEvt) {
     if (document.activeElement === keyDownEvt.target && keyDownEvt.keyCode === ENTER_BUTTON) {
-      removeCard();
+      pinPopupClickHandler();
     }
   };
 
@@ -55,13 +55,13 @@
     var popupClose = document.querySelector('.popup__close');
 
     // повесить бинды
-    popupClose.addEventListener('click', removeCard);
-    document.addEventListener('keydown', popupCloseEscape);
-    popupClose.addEventListener('keydown', popupCloseEnter);
+    popupClose.addEventListener('click', pinPopupClickHandler);
+    document.addEventListener('keydown', popupCloseEscapeHandler);
+    popupClose.addEventListener('keydown', popupCloseEnterHandler);
   };
 
   window.showCard = {
     showCard: showCard,
-    removeCard: removeCard
+    pinPopupClickHandler: pinPopupClickHandler
   };
 })();

@@ -5,7 +5,7 @@
   var FORM_TYPES = ['bungalo', 'flat', 'house', 'palace'];
   var FORM_TYPES_MIN_PRICES = [0, 1000, 5000, 10000];
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
-  var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
+  var FORM_ROOM_CAPACITIES = [[1], [1, 2], [1, 2, 3], [0]];
 
   var DEFAULT_AVATAR = 'img/muffin.png';
 
@@ -47,32 +47,22 @@
   disable(true);
 
 
-  // Синхронизация атрибутов value
-  var syncFormControlValues = function (element, value) {
-    element.value = value;
-  };
+  window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, window.syncFields.syncFormControlValues);
+  window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, window.syncFields.syncFormControlValues);
+  window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, window.syncFields.syncFormControlMinValues);
+  window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, window.syncFields.setAllowedOptions);
 
-  // Задаём значение с минимальной ценой для типа квартиры
-  var syncFormControlMinValues = function (element, value) {
-    element.min = value;
-  };
-
-
-  window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
-  window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
-  window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, syncFormControlMinValues);
-  window.syncFields.syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
 
   var clearForm = function () {
     form.reset();
   };
 
-  var errorData = function (field, error) {
+  var showErrorData = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
   };
 
 
-  var MessageErrorHandle = function (message) {
+  var showMessageError = function (message) {
     var el = document.createElement('DIV');
     el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     el.textContent = 'Ошибка отправки формы: ' + message;
@@ -112,30 +102,30 @@
 
     // проверка поля адреса
     if (formAddress.value === '') {
-      errorData(formAddress, true);
+      showErrorData(formAddress, true);
       errors.push(['formAddress', 'Заполните это поле']);
     } else {
-      errorData(formAddress, false);
+      showErrorData(formAddress, false);
     }
 
     // проверка поля описания
     if (formTitle.value.length < DESCRIPTION_MIN_SYMBOLS || formTitle.value.length > DESCRIPTION_MAX_SYMBOLS) {
-      errorData(formTitle, true);
+      showErrorData(formTitle, true);
       errors.push(['formTitle', 'Заголовок должен быть не меньше 30 и не больше 100 символов']);
     } else {
-      errorData(formTitle, false);
+      showErrorData(formTitle, false);
     }
 
     // проверка поля цены
     if (parseInt(formPriceFlat.value, 10) < formPriceFlat.min || parseInt(formPriceFlat.value, 10) > MAX_PRICE_FLAT || isNaN(parseInt(formPriceFlat.value, 10))) {
-      errorData(formPriceFlat, true);
+      showErrorData(formPriceFlat, true);
       errors.push(['formPriceFlat', 'Цена должна быть не меньше ' + formPriceFlat.min + ' или не больше ' + MAX_PRICE_FLAT]);
     } else {
-      errorData(formPriceFlat, false);
+      showErrorData(formPriceFlat, false);
     }
 
     if (!errors.length) {
-      window.backend.upLoad(new FormData(form), clearForm, MessageErrorHandle);
+      window.backend.upLoad(new FormData(form), clearForm, showMessageError);
     }
   });
 
