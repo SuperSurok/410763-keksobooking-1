@@ -55,7 +55,7 @@
     }
   };
 
-  var pinBindHandler = function (marker, offer) {
+  var onPinBind = function (marker, offer) {
     makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
     makeActive(marker, true);
     window.showCard.pinPopupClickHandler();
@@ -64,7 +64,7 @@
 
   var pinBind = function (marker, offer) {
     marker.addEventListener('click', function () {
-      pinBindHandler([marker], offer);
+      onPinBind([marker], offer);
     });
   };
 
