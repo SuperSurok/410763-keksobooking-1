@@ -46,13 +46,7 @@
   };
   disable(true);
 
-  /*
-    Согласно ТЗ при выборе количества комнат существуют следующие варианты выбора гостей:
-    1 комната — «для 1 гостя»;
-    2 комнаты — «для 2 гостей» или «для 1 гостя»;
-    3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
-    100 комнат — «не для гостей»;
-  */
+
   window.syncFields.syncFormControls(formTimein, formTimeout, FORM_CHECKINS, FORM_CHECKOUTS, window.syncFields.syncFormControlValues);
   window.syncFields.syncFormControls(formTimeout, formTimein, FORM_CHECKOUTS, FORM_CHECKINS, window.syncFields.syncFormControlValues);
   window.syncFields.syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_MIN_PRICES, window.syncFields.syncFormControlMinValues);
