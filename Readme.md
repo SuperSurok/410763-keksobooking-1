@@ -2,6 +2,7 @@
 
 * Студент: [Сергей Лебедев](https://up.htmlacademy.ru/javascript/12/user/410763).
 * Наставник: `У меня нет наставника`.
+* [Посмотреть сайт](https://supersurok.github.io/410763-keksobooking-12/)
 
 ---
 
